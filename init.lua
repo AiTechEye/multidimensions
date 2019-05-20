@@ -125,8 +125,6 @@ if dim.name then
 				action_on = function (pos, node)
 				local owner=minetest.get_meta(pos):get_string("owner")
 				local pos2={x=pos.x,y=y,z=pos.z}
-				if minetest.is_protected(pos2, owner)==false then	
-				end
 				for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
 					multidimensions.move(ob,pos2)
 				end
@@ -253,8 +251,6 @@ minetest.register_node("multidimensions:teleporter0", {
 		action_on = function (pos, node)
 		local owner=minetest.get_meta(pos):get_string("owner")
 		local pos2={x=pos.x,y=0,z=pos.z}
-		if minetest.is_protected(pos2, owner)==false then	
-		end
 		for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
 			multidimensions.move(ob,pos2)
 		end
