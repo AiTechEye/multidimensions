@@ -1,7 +1,6 @@
 # multidimensions
-
-License: code and media CC0
-Version: 1.1
+# License: code and media CC0  
+# Version: 1.1  
 
 Multi dimensions
 This mod adds a few dimensions to the game (you can add more)
