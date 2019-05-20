@@ -189,8 +189,9 @@ minetest.register_node("multidimensions:large_cactus", {
 })
 
 
-minetest.register_abm({
+minetest.register_lbm({
 	name = "multidimensions:lbm",
+	run_at_every_load = true,
 	nodenames = {"group:multidimensions_tree"},
 	action = function(pos, node)
 		minetest.set_node(pos, {name = "air"})
