@@ -91,10 +91,6 @@ multidimensions.register_dimension("cold",{
 })
 
 multidimensions.register_dimension("desert",{
-	ground_ores = {
-		["multidimensions:large_cactus"]=100,
-		["multidimensions:pine_treesnow"]=8000,
-	},
 	dirt="default:desert_sand",
 	grass="default:desert_sand",
 	stone="default:desert_stone",
@@ -183,10 +179,6 @@ minetest.register_node("multidimensions:acacia_tree", {
 	drawtype="airlike",
 	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
 })
-minetest.register_node("multidimensions:large_cactus", {
-	drawtype="airlike",
-	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
-})
 
 minetest.register_lbm({
 	name = "multidimensions:lbm",
@@ -207,8 +199,6 @@ minetest.register_lbm({
 			tree=minetest.get_modpath("default") .. "/schematics/aspen_tree.mts"
 		elseif node.name=="multidimensions:acacia_tree" then
 			tree=minetest.get_modpath("default") .. "/schematics/acacia_tree.mts"
-		elseif node.name=="multidimensions:large_cactus" then
-			tree=minetest.get_modpath("default") .. "/schematics/large_cactus.mts"
 		end
 		minetest.place_schematic({x=pos.x,y=pos.y,z=pos.z}, tree, "random", {}, true)
 	end,
