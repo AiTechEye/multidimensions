@@ -1,6 +1,0 @@
-default
-
-beds?
-sethome?
-flowers?
-fire?
