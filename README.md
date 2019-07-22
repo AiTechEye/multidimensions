@@ -28,14 +28,14 @@ player_transfer_distance=50
 # The API
 
 eeverything can be nil, except the name
-
+```lua
 
 multidimensions.register_dimension("name",{
-	ground_ores = {
-    ["defalt:tree"] = 1000, -- (chance) ... spawns on ground, used by trees, grass, flowers...
-    ["defalt:stone"] = {chance=1000}, -- same as above
+  ground_ores = {
+    ["defalt:tree"] = 1000,             -- (chance) ... spawns on ground, used by trees, grass, flowers...
+     ["defalt:stone"] = {chance=1000}, 	-- same as above
   },
-  stone_ores = {},     -- works as above, but in stone
+  stone_ores = {},     	     -- works as above, but in stone
   dirt_ores = {},
   grass_ores = {},
   air_ores = {},
@@ -48,10 +48,10 @@ multidimensions.register_dimension("name",{
   dirt_depth = 3,
   ground_limit = 3530,
   water_depth = 8,
-  enable_water = nil,      -- (false)
+  enable_water = nil,       -- (false)
   terrain_density = 0.4,
-  flatland = nil,         -- (false)
-  teleporter = nil,       -- (false)
+  flatland = nil,           -- (false)
+  teleporter = nil,         -- (false)
   
   stone = "default:stone",
   dirt = "default:dirt",
@@ -72,9 +72,10 @@ multidimensions.register_dimension("name",{
     flags = "absvalue",
    },
    
-	craft = { -- teleport craft recipe
-		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
-		{"default:wood","default:mese","default:wood",},
-		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
-	}
+   craft = { -- teleport craft recipe
+	{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	{"default:wood","default:mese","default:wood",},
+	{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+   }
 })
+```
