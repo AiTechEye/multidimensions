@@ -1,8 +1,6 @@
 # multidimensions
-# Licenses: code: LGPL-2.1, media: CC BY-SA-4.0  
-# Version: 1.95  
-
-
+Licenses: code: LGPL-2.1, media: CC BY-SA-4.0  
+Version: 1.95  
 
 # the info is currently incorrect, changing it later
 
