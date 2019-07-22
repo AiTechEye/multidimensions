@@ -91,6 +91,10 @@ multidimensions.register_dimension("cold",{
 })
 
 multidimensions.register_dimension("desert",{
+	ground_ores = {
+		["multidimensions:large_cactus"]=100,
+		["multidimensions:pine_treesnow"]=8000,
+	},
 	dirt="default:desert_sand",
 	grass="default:desert_sand",
 	stone="default:desert_stone",
@@ -150,4 +154,62 @@ multidimensions.register_dimension("sandstone",{
 		{"default:sandstone","default:mese","default:sandstone",},
 		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
 	}
-})	
+})
+
+
+
+
+minetest.register_node("multidimensions:tree", {
+	drawtype="airlike",
+	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
+})
+minetest.register_node("multidimensions:pine_tree", {
+	drawtype="airlike",
+	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
+})
+minetest.register_node("multidimensions:pine_treesnow", {
+	drawtype="airlike",
+	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
+})
+minetest.register_node("multidimensions:jungle_tree", {
+	drawtype="airlike",
+	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
+})
+minetest.register_node("multidimensions:aspen_tree", {
+	drawtype="airlike",
+	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
+})
+minetest.register_node("multidimensions:acacia_tree", {
+	drawtype="airlike",
+	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
+})
+minetest.register_node("multidimensions:large_cactus", {
+	drawtype="airlike",
+	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
+})
+
+minetest.register_lbm({
+	name = "multidimensions:lbm",
+	run_at_every_load = true,
+	nodenames = {"group:multidimensions_tree"},
+	action = function(pos, node)
+		minetest.set_node(pos, {name = "air"})
+		local tree=""
+		if node.name=="multidimensions:tree" then
+			tree=minetest.get_modpath("default") .. "/schematics/apple_tree.mts"
+		elseif node.name=="multidimensions:pine_tree" then
+			tree=minetest.get_modpath("default") .. "/schematics/pine_tree.mts"
+		elseif node.name=="multidimensions:pine_treesnow" then
+			tree=minetest.get_modpath("default") .. "/schematics/snowy_pine_tree_from_sapling.mts"
+		elseif node.name=="multidimensions:jungle_tree" then
+			tree=minetest.get_modpath("default") .. "/schematics/jungle_tree.mts"
+		elseif node.name=="multidimensions:aspen_tree" then
+			tree=minetest.get_modpath("default") .. "/schematics/aspen_tree.mts"
+		elseif node.name=="multidimensions:acacia_tree" then
+			tree=minetest.get_modpath("default") .. "/schematics/acacia_tree.mts"
+		elseif node.name=="multidimensions:large_cactus" then
+			tree=minetest.get_modpath("default") .. "/schematics/large_cactus.mts"
+		end
+		minetest.place_schematic({x=pos.x,y=pos.y,z=pos.z}, tree, "random", {}, true)
+	end,
+})

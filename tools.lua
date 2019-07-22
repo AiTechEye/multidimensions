@@ -1,11 +1,3 @@
---[[
-
- ==== using this later ====
-
-
-
-
-
 minetest.register_privilege("dimensions", {
 	description = "Can use dimensions teleport tool",
 	give_to_singleplayer= false,
@@ -43,10 +35,9 @@ multidimensions.form=function(player,object)
 	else
 		info="Teleport object"
 	end
-	buttons="button_exit[0,1;3,1;b1;Earth]"
-	for i, but in pairs(multidimensions.dimensions) do
-	if but.name then
-		buttons=buttons .."button_exit[" .. x.. "," .. y .. ";3,1;b" .. n .. ";" .. but.name .. "]"
+	buttons="button_exit[0,1;3,1;earth;earth]"
+	for i, but in pairs(multidimensions.registered_dimensions) do
+		buttons=buttons .."button_exit[" .. x.. "," .. y .. ";3,1;" .. i .. ";" .. i .. "]"
 		if x==3 then
 			y=y+1
 			x=0
@@ -54,7 +45,6 @@ multidimensions.form=function(player,object)
 			x=3
 		end
 		n=n+1
-	end
 	end
 	local gui=""
 	gui=""
@@ -71,20 +61,23 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 		local name=player:get_player_name()
 		local pos=multidimensions.user[name].pos
 		local object=multidimensions.user[name].object
-		local n=1
 		local y=0
+		local pos=object:get_pos()
 		multidimensions.user[name]=nil
-		for i, but in pairs(multidimensions.dimensions) do
-			local pos=object:get_pos()
-			local pos2={x=pos.x,y=multidimensions.dimensions[n].y,z=pos.z}
-			if pressed["b"..n] and minetest.is_protected(pos2, name)==false then
-				if n==1 then pos2.y=0 end
-					multidimensions.move(object,pos2)
-				return true
-			end
-			n=n+1
+
+		if pressed.earth then
+			multidimensions.move(object,{x=pos.x,y=0,z=pos.z})
+			return
 		end
-		return false
+
+		for i, v in pairs(multidimensions.registered_dimensions) do
+			local pos2={x=pos.x,y=v.dirt_start+v.dirt_depth+1,z=pos.z}
+			if pressed[i] and minetest.is_protected(pos2, name)==false then
+				multidimensions.move(object,pos2)
+				return
+			end
+		end
+		return
 	end
 end)
 
@@ -111,14 +104,6 @@ on_use = function(itemstack, user, pointed_thing)
 	return itemstack
 end
 })
-
-
-
---]]
-
-
-
-
 
 multidimensions.move=function(object,pos)
 	local move=false
