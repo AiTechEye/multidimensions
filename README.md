@@ -52,6 +52,7 @@ multidimensions.register_dimension("name",{
   terrain_density = 0.4,
   flatland = nil,           -- (false)
   teleporter = nil,         -- (false)
+  gravity = 1,
   
   stone = "default:stone",
   dirt = "default:dirt",
