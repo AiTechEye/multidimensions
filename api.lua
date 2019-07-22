@@ -13,7 +13,7 @@ multidimensions.register_dimension=function(name,def)
 	def.enable_water = def.enable_water == nil
 	def.terrain_density = def.terrain_density or	0.4
 	def.flatland = def.flatland		
-
+	def.gravity = def.gravity or			1
 
 	def.stone = minetest.get_content_id(def.stone or "default:stone")
 	def.dirt = minetest.get_content_id(def.dirt or "default:dirt")

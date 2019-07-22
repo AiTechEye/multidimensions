@@ -105,6 +105,24 @@ on_use = function(itemstack, user, pointed_thing)
 end
 })
 
+minetest.register_on_respawnplayer(function(player)
+	multidimensions.apply_gravity(player)
+end)
+minetest.register_on_joinplayer(function(player)
+	multidimensions.apply_gravity(player)
+end)
+
+multidimensions.apply_gravity=function(player)
+	local p = player:get_pos()
+	for i, v in pairs(multidimensions.registered_dimensions) do
+		if p.y <v.max_y and p.y > v.min_y then
+			player:set_physics_override({gravity=v.gravity})
+			return
+		end
+	end
+	player:set_physics_override({gravity=1})
+end
+
 multidimensions.move=function(object,pos)
 	local move=false
 	object:set_pos(pos)
@@ -137,3 +155,14 @@ multidimensions.move=function(object,pos)
 	end, pos,object,move)
 	return true
 end
+
+local capg = 0
+minetest.register_globalstep(function(dtime)
+	capg=capg+dtime
+	if capg > 2 then
+		capg=0
+		for _, player in pairs(minetest.get_connected_players()) do
+			multidimensions.apply_gravity(player)
+		end
+	end
+end)

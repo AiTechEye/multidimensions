@@ -54,6 +54,7 @@ multidimensions.register_dimension("earthlike2",{
 	node={description="Alternative earth 2"},
 	map={spread={x=20,y=18,z=20}},
 	ground_limit=550,
+	gravity=0.5,
 	craft = {
 		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
 		{"default:aspen_wood","default:mese","default:aspen_wood",},
@@ -104,6 +105,7 @@ multidimensions.register_dimension("desert",{
 	sand="default:desert_sand",
 	node={description="desert"},
 	enable_water=false,
+	gravity=0.4,
 	map={octaves=2,persist=0.3,lacunarity=2},
 	craft = {
 		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
