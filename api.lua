@@ -90,15 +90,20 @@ multidimensions.register_dimension=function(name,def)
 				multidimensions.move(player,pos2)
 			end
 		end
-		node.mesecons = {effector = {
-			action_on = function (pos, node)
-			local owner=minetest.get_meta(pos):get_string("owner")
-			local pos2={x=pos.x,y=def.dirt_start+def.dirt_depth+2,z=pos.z}
-			for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
-				multidimensions.move(ob,pos2)
-			end
-			return false
-		end}},
+
+		node.mesecons = {
+			receptor = {state = "off"},
+			effector={
+				action_on=function(pos, node)
+					local owner=minetest.get_meta(pos):get_string("owner")
+					local pos2={x=pos.x,y=def.dirt_start+def.dirt_depth+2,z=pos.z}
+					for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
+						multidimensions.move(ob,pos2)
+					end
+					return false
+				end
+			}
+		}
 		minetest.register_node("multidimensions:teleporter_" .. name, node)
 
 		if multidimensions.craftable_teleporters and craft then
