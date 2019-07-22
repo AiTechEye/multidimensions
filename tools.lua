@@ -1,3 +1,11 @@
+--[[
+
+ ==== using this later ====
+
+
+
+
+
 minetest.register_privilege("dimensions", {
 	description = "Can use dimensions teleport tool",
 	give_to_singleplayer= false,
@@ -17,41 +25,6 @@ multidimensions.setrespawn=function(object,pos)
 		sethome.set(name, pos)
 	end
 end
-
-multidimensions.move=function(object,pos)
-	local move=false
-	object:set_pos(pos)
-	multidimensions.setrespawn(object,pos)
-	minetest.after(1, function(pos,object,move)
-		for i=1,100,1 do
-			local nname=minetest.get_node(pos).name
-			if nname~="air" and nname~="ignore" then
-				pos.y=pos.y+1
-				move=true
-			elseif move then
-				object:set_pos(pos)
-				multidimensions.setrespawn(object,pos)
-				break
-			end
-		end
-	end, pos,object,move)
-	minetest.after(5, function(pos,object,move)
-		for i=1,100,1 do
-			local nname=minetest.get_node(pos).name
-			if nname~="air" and nname~="ignore" then
-				pos.y=pos.y+1
-				move=true
-			elseif move then
-				object:set_pos(pos)
-				multidimensions.setrespawn(object,pos)
-				break
-			end
-		end
-	end, pos,object,move)
-	return true
-end
-
-
 
 multidimensions.form=function(player,object)
 	local name=player:get_player_name()
@@ -92,7 +65,6 @@ multidimensions.form=function(player,object)
 		return minetest.show_formspec(player:get_player_name(), "multidimensions.form",gui)
 	end, gui)
 end
-
 
 minetest.register_on_player_receive_fields(function(player, form, pressed)
 	if form=="multidimensions.form" then
@@ -139,3 +111,44 @@ on_use = function(itemstack, user, pointed_thing)
 	return itemstack
 end
 })
+
+
+
+--]]
+
+
+
+
+
+multidimensions.move=function(object,pos)
+	local move=false
+	object:set_pos(pos)
+	multidimensions.setrespawn(object,pos)
+	minetest.after(1, function(pos,object,move)
+		for i=1,100,1 do
+			local nname=minetest.get_node(pos).name
+			if nname~="air" and nname~="ignore" then
+				pos.y=pos.y+1
+				move=true
+			elseif move then
+				object:set_pos(pos)
+				multidimensions.setrespawn(object,pos)
+				break
+			end
+		end
+	end, pos,object,move)
+	minetest.after(5, function(pos,object,move)
+		for i=1,100,1 do
+			local nname=minetest.get_node(pos).name
+			if nname~="air" and nname~="ignore" then
+				pos.y=pos.y+1
+				move=true
+			elseif move then
+				object:set_pos(pos)
+				multidimensions.setrespawn(object,pos)
+				break
+			end
+		end
+	end, pos,object,move)
+	return true
+end

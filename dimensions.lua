@@ -1,157 +1,153 @@
-local ores={"default:stone_with_coal","default:stone_with_iron","default:stone_with_copper","default:stone_with_gold","default:stone_with_mese","default:stone_with_diamond","default:mese"}
-multidimensions.dimensions[1]={}
-multidimensions.dimensions[2]={
-		"default:stone","default:dirt","default:dirt_with_grass",
-		name="Alternative earth",color="007003",ores=ores,
-		craft="default:stonebrick",
-		nature={
-			flower1={size=3,scarcity=20,num=2,node="flowers:mushroom_brown"},
-			flower2={size=3,scarcity=20,num=2,node="flowers:mushroom_red"},
-			flower3={size=3,scarcity=20,num=2,node="flowers:rose"},
-			flower4={size=3,scarcity=20,num=2,node="flowers:tulip"},
-			flower5={size=3,scarcity=20,num=2,node="flowers:dandelion_yellow"},
-			flower6={size=3,scarcity=20,num=2,node="flowers:geranium"},
-			flower7={size=3,scarcity=20,num=2,node="flowers:viola"},
-			flower8={size=3,scarcity=20,num=2,node="flowers:dandelion_white"},
-			flower9={size=3,scarcity=20,num=2,node="default:junglegrass"},
-			grass={size=3,scarcity=4,num=4,node="default:grass_3"},
-			papyrus={size=1,scarcity=20,num=1,node="default:papyrus"},
-			tree={size=1,scarcity=5,num=1,node="multidimensions:tree"},
-			aspen_tree={size=1,scarcity=10,num=1,node="multidimensions:aspen_tree"},
-			pine_tree={size=1,scarcity=15,num=1,node="multidimensions:pine_tree"},
-		},
-		blob={
-			water={node="default:water_source",wherein="group:soil",miny=995,maxy=1003,clust_clust_size=5,clust_scarcity=32},
-			cave1={node="air",wherein="default:stone",miny=10,maxy=1005,clust_clust_size=5,clust_scarcity=32},
-			cave2={node="air",wherein="default:stone",miny=10,maxy=905,clust_clust_size=10,clust_scarcity=32},
-			cave3={node="air",wherein="default:stone",miny=10,maxy=905,clust_clust_size=20,clust_scarcity=64},
-			cliff={node="default:stone",wherein="air",miny=990,maxy=1005,clust_clust_size=10,clust_scarcity=32},
-			cliff2={node="default:stone",wherein="air",miny=990,maxy=1020,clust_clust_size=20,clust_scarcity=32},
-			cliff3={node="default:stone",wherein="air",miny=970,maxy=1035,clust_clust_size=30,clust_scarcity=60},
-			clay={node="default:clay",wherein="default:stone",miny=200,maxy=980,clust_clust_size=5,clust_scarcity=32},
-			sand={node="default:sand",wherein="group:soil",miny=990,maxy=1000,clust_clust_size=5,clust_scarcity=32},
-			gravel={node="default:gravel",wherein="group:soil",miny=1000,maxy=1000,clust_clust_size=5,clust_scarcity=32},
-			lava={node="default:lava_source",wherein="default:stone",miny=10,maxy=950,clust_clust_size=5,clust_scarcity=64},
-			lava2={node="default:lava_source",wherein="default:stone",miny=10,maxy=900,clust_clust_size=20,clust_scarcity=128},
-		}
+local ores={
+	["default:stone_with_coal"]=200,
+	["default:stone_with_iron"]=400,
+	["default:stone_with_copper"]=500,
+	["default:stone_with_gold"]=2000,
+	["default:stone_with_mese"]=10000,
+	["default:stone_with_diamond"]=20000,
+	["default:mese"]=40000,
+	["default:gravel"]=3000
 }
-multidimensions.dimensions[3]={}
-multidimensions.dimensions[4]={
-		"default:stone","default:dirt","default:dirt_with_dry_grass",
-		name="Savana",color="ffb847",ores=ores,
-		craft="default:acacia_wood",
-		nature={
-			flower1={size=3,scarcity=20,num=2,node="flowers:mushroom_brown"},
-			flower2={size=3,scarcity=20,num=2,node="flowers:mushroom_red"},
-			flower3={size=3,scarcity=20,num=2,node="flowers:rose"},
-			flower4={size=3,scarcity=20,num=2,node="flowers:tulip"},
-			flower5={size=3,scarcity=20,num=2,node="flowers:dandelion_yellow"},
-			flower6={size=3,scarcity=20,num=2,node="flowers:geranium"},
-			flower7={size=3,scarcity=20,num=2,node="flowers:viola"},
-			flower8={size=3,scarcity=20,num=2,node="flowers:dandelion_white"},
-			flower9={size=3,scarcity=20,num=2,node="default:junglegrass"},
-			grass={size=3,scarcity=4,num=4,node="default:grass_5"},
-			grass2={size=4,scarcity=8,num=3,node="default:dry_shrub"},
-			grass3={size=3,scarcity=7,num=2,node="default:dry_grass_4"},
-			papyrus={size=1,scarcity=20,num=1,node="default:papyrus"},
-			tree={size=1,scarcity=20,num=1,node="multidimensions:acacia_tree"},
-			tree2={size=1,scarcity=25,num=1,node="multidimensions:jungle_tree"},
-		},
-		blob={
-			water={node="default:river_water_source",wherein="group:soil",miny=995,maxy=1003,clust_clust_size=5,clust_scarcity=64},
-			cave1={node="air",wherein="default:stone",miny=10,maxy=1005,clust_clust_size=5,clust_scarcity=32},
-			cave2={node="air",wherein="default:stone",miny=10,maxy=905,clust_clust_size=10,clust_scarcity=32},
-			cave3={node="air",wherein="default:stone",miny=10,maxy=905,clust_clust_size=20,clust_scarcity=64},
-			cliff={node="default:stone",wherein="air",miny=990,maxy=1005,clust_clust_size=10,clust_scarcity=32},
-			cliff2={node="default:stone",wherein="air",miny=990,maxy=1010,clust_clust_size=20,clust_scarcity=32},
-			cliff3={node="default:stone",wherein="air",miny=970,maxy=1035,clust_clust_size=30,clust_scarcity=64},
-			clay={node="default:clay",wherein="default:stone",miny=200,maxy=980,clust_clust_size=5,clust_scarcity=32},
-			sand={node="default:desert_sand",wherein="group:soil",miny=990,maxy=1000,clust_clust_size=5,clust_scarcity=32},
-			gravel={node="default:gravel",wherein="group:soil",miny=1000,maxy=1000,clust_clust_size=5,clust_scarcity=32},
-			lava={node="default:lava_source",wherein="default:stone",miny=10,maxy=950,clust_clust_size=5,clust_scarcity=64},
-			lava2={node="default:lava_source",wherein="default:stone",miny=10,maxy=900,clust_clust_size=20,clust_scarcity=128},
-			grass2={node="default:dirt_with_grass",wherein="group:soil",miny=990,maxy=1000,clust_clust_size=5,clust_scarcity=32},
-		}
+
+local plants = {
+	["flowers:mushroom_brown"] = 1000,
+	["flowers:mushroom_red"] = 1000,
+	["flowers:mushroom_brown"] = 1000,
+	["flowers:rose"] = 1000,
+	["flowers:tulip"] = 1000,
+	["flowers:dandelion_yellow"] = 1000,
+	["flowers:geranium"] = 1000,
+	["flowers:viola"] = 1000,
+	["flowers:dandelion_white"] = 1000,
+	["default:junglegrass"] = 2000,
+	["default:papyrus"] = 2000,
+	["default:grass_3"] = 10,
+
+	["multidimensions:tree"] = 1000,
+	["multidimensions:aspen_tree"] = 1000,
+	["multidimensions:pine_tree"] = 1000,
 }
-multidimensions.dimensions[5]={
-		"default:ice","default:snowblock","default:snowblock",
-		name="Cold",color="1effe8",ores={"default:stone","default:snowblock"},
-		craft="default:ice",
-		nature={
-			snow={size=1,scarcity=2,num=2,node="default:snow"},
-			snowblock={size=3,scarcity=10,num=5,node="default:snowblock"},
-			pine_tree={size=1,scarcity=20,num=1,node="multidimensions:pine_treesnow"},
-		},
-		blob={
-			water={node="default:ice",wherein="default:ice",miny=995,maxy=1003,clust_clust_size=5,clust_scarcity=32},
-			cave1={node="air",wherein="default:ice",miny=10,maxy=1005,clust_clust_size=5,clust_scarcity=32},
-			cave2={node="air",wherein="default:ice",miny=10,maxy=905,clust_clust_size=10,clust_scarcity=32},
-			cave3={node="air",wherein="default:ice",miny=10,maxy=905,clust_clust_size=20,clust_scarcity=64},
-			cliff={node="default:ice",wherein="air",miny=990,maxy=1005,clust_clust_size=10,clust_scarcity=32},
-			cliff2={node="default:ice",wherein="air",miny=990,maxy=1010,clust_clust_size=20,clust_scarcity=32},
-			cliff3={node="default:snowblock",wherein="air",miny=970,maxy=1035,clust_clust_size=30,clust_scarcity=32},
-		}
-}
-multidimensions.dimensions[6]={
-		"default:stone","default:desert_sand","default:desert_sand",
-		name="Desert",color="ffcf91",ores=ores,
-		craft="default:desert_stone",
-		nature={
-			grass2={size=2,scarcity=20,num=3,node="default:dry_shrub"},
-			tree={size=1,scarcity=25,num=1,node="multidimensions:large_cactus"},
-		},
-		blob={
-			cave1={node="air",wherein="default:desert_stone",miny=10,maxy=1005,clust_clust_size=5,clust_scarcity=32},
-			cave2={node="air",wherein="default:desert_stone",miny=10,maxy=905,clust_clust_size=10,clust_scarcity=32},
-			cave3={node="air",wherein="default:desert_stone",miny=10,maxy=905,clust_clust_size=20,clust_scarcity=64},
-			cliff={node="default:desert_stone",wherein="air",miny=990,maxy=1005,clust_clust_size=10,clust_scarcity=32},
-			cliff2={node="default:desert_stone",wherein="air",miny=990,maxy=1010,clust_clust_size=20,clust_scarcity=32},
-			clay={node="default:clay",wherein="default:desert_stone",miny=200,maxy=980,clust_clust_size=5,clust_scarcity=32},
-			cliff3={node="default:desert_sand",wherein="air",miny=900,maxy=1020,clust_clust_size=50,clust_scarcity=32},
-			gravel={node="default:gravel",wherein="default:desert_stone",miny=100,maxy=1000,clust_clust_size=5,clust_scarcity=32},
-			lava={node="default:lava_source",wherein="default:desert_stone",miny=10,maxy=950,clust_clust_size=5,clust_scarcity=64},
-			lava2={node="default:lava_source",wherein="default:desert_stone",miny=10,maxy=900,clust_clust_size=20,clust_scarcity=128},
-		}
-}
-multidimensions.dimensions[7]={
-		"default:lava_source","default:lava_source","default:lava_source",
-		name="Hot",color="ff4300",
-		craft="bucket:bucket_lava",
-		nature={
-			fire={size=1,scarcity=2,num=3,node="fire:permanent_flame"},
-		},
-		blob={
-			cliff={node="fire:permanent_flame",wherein="air",miny=995,maxy=1005,clust_clust_size=5,clust_scarcity=16},
-			--cliff2={node="fire:permanent_flame",wherein="air",miny=900,maxy=1020,clust_clust_size=50,clust_scarcity=32},
-			cliff3={node="default:stone",wherein="air",miny=990,maxy=1005,clust_clust_size=10,clust_scarcity=32},
-			cliff4={node="default:stone",wherein="air",miny=990,maxy=1020,clust_clust_size=20,clust_scarcity=32},
-			cliff5={node="default:stone",wherein="air",miny=970,maxy=1035,clust_clust_size=30,clust_scarcity=60},
-		}
-}
-multidimensions.dimensions[8]={
-		"default:water_source","default:water_source","default:water_source",
-		name="Water",color="1e38ff",ores=ores,
-		craft="bucket:bucket_water",
-		blob={
-			cliff={node="default:stone",wherein="default:water_source",miny=200,maxy=1000,clust_clust_size=10,clust_scarcity=16},
-			cliff2={node="default:stone",wherein="default:water_source",miny=200,maxy=1000,clust_clust_size=20,clust_scarcity=32},
-			cliff2={node="default:stone",wherein="default:water_source",miny=200,maxy=1000,clust_clust_size=50,clust_scarcity=50},
-		}
-}
-multidimensions.dimensions[9]={
-		"default:sandstone","default:sandstone","default:sandstone",
-		name="Sandstone",color="fdffbf",
-		craft="default:sandstone",
-		blob={
-			cliff={node="default:sandstone",wherein="air",miny=995,maxy=1010,clust_clust_size=10,clust_scarcity=16},
-			cliff2={node="default:sandstone",wherein="air",miny=980,maxy=1020,clust_clust_size=20,clust_scarcity=32},
-			cliff2={node="default:sandstone",wherein="air",miny=950,maxy=1050,clust_clust_size=50,clust_scarcity=50},
-		}
-}
-multidimensions.dimensions[3]={
-	"default:stone","default:dirt","default:dirt_with_grass",ores=ores,color="008003",
-	name="Alternative earth 2",
-	craft="default:sandstonebrick",
-	nature=multidimensions.dimensions[2].nature,
-	blob=multidimensions.dimensions[2].blob,
-}	
+
+multidimensions.register_dimension("earthlike1",{
+	ground_ores = table.copy(plants),
+	stone_ores = table.copy(ores),
+	sand_ores={["default:clay"]=100},
+	node={description="Alternative earth"},
+	craft = {
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+		{"default:wood","default:mese","default:wood",},
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	}
+})
+
+multidimensions.register_dimension("earthlike2",{
+	ground_ores = table.copy(plants),
+	stone_ores = table.copy(ores),
+	sand_ores={["default:clay"]=100},
+	node={description="Alternative earth 2"},
+	map={spread={x=20,y=18,z=20}},
+	ground_limit=550,
+	craft = {
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+		{"default:aspen_wood","default:mese","default:aspen_wood",},
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	}
+})
+
+multidimensions.register_dimension("savana",{
+	ground_ores = {
+		["default:dry_shrub"]=50,
+		["default:dry_grass_4"]=10,
+		["multidimensions:acacia_tree"]=5000,
+		["multidimensions:jungle_tree"]=7000,
+	},
+	grass="default:dirt_with_dry_grass",
+	stone_ores = table.copy(ores),
+	sand_ores={["default:clay"]=100},
+	node={description="Savana"},
+	craft = {
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+		{"default:acacia","default:mese","default:acacia",},
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	}
+})
+
+multidimensions.register_dimension("cold",{
+	ground_ores = {
+		["default:snow"]=100,
+		["multidimensions:pine_treesnow"]=8000,
+	},
+	dirt="default:snowblock",
+	grass="default:snowblock",
+	water="default:ice",
+	stone="default:ice",
+	sand="default:ice",
+	node={description="cold"},
+	craft = {
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+		{"default:aspen_wood","default:mese","default:aspen_wood",},
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	}
+})
+
+multidimensions.register_dimension("desert",{
+	dirt="default:desert_sand",
+	grass="default:desert_sand",
+	stone="default:desert_stone",
+	sand="default:desert_sand",
+	node={description="desert"},
+	enable_water=false,
+	map={octaves=2,persist=0.3,lacunarity=2},
+	craft = {
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+		{"default:desert_stone","default:mese","default:desert_stone",},
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	}
+})
+
+multidimensions.register_dimension("hot",{
+	ground_ores = {
+		["fire:permanent_flame"]=10,
+	},
+	dirt="default:stone",
+	grass="default:stone",
+	sand="default:lava_source",
+	water="default:lava_source",
+	map={octaves=3,persist=0.6,lacunarity=2},
+	node={description="Hot"},
+	craft = {
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+		{"default:torch","default:mese","default:torch",},
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	}
+})
+
+
+multidimensions.register_dimension("water",{
+	dirt="default:water_source",
+	grass="default:water_source",
+	sand="default:stone",
+	node={description="Water"},
+	flatland=1,
+	stone="default:water_source",
+	air="default:water_source",
+	craft = {
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+		{"default:sand","default:mese","default:sand",},
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	}
+})
+
+multidimensions.register_dimension("sandstone",{
+	dirt="default:sandstone",
+	grass="default:sandstone",
+	sand="default:sandstone",
+	node={description="Sandstone"},
+	stone="default:sandstone",
+	enable_water=false,
+	craft = {
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+		{"default:sandstone","default:mese","default:sandstone",},
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	}
+})	
