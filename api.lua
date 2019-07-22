@@ -23,8 +23,6 @@ multidimensions.register_dimension=function(name,def)
 	def.sand = minetest.get_content_id(def.sand or "default:sand")
 	def.bedrock = minetest.get_content_id(def.bedrock or "multidimensions:bedrock")
 
-
-
 	def.map = def.map or {}
 	def.map.offset = def.map.offset or 0
 	def.map.scale = def.map.scale or 1
@@ -54,8 +52,14 @@ multidimensions.register_dimension=function(name,def)
 				elseif t ~="table" then
 					error("Multidimensions: ("..name..") ore "..i2.." defines as number (chance) or table, is: ".. t)
 				else
-					def[i1][n] = i2
-					def[i1][n].chance = def[n].chance or 1000
+					def[i1][n] = v2
+					local ndef = def[i1][n]
+					ndef.chance = ndef.chance or 1000
+					if ndef.min_heat and not ndef.max_heat then
+						ndef.max_heat = 1000
+					elseif ndef.max_heat and not ndef.min_heat then
+						ndef.min_heat = -1000
+					end
 				end
 				def[i1][i2]=nil
 			end
@@ -90,7 +94,6 @@ multidimensions.register_dimension=function(name,def)
 				multidimensions.move(player,pos2)
 			end
 		end
-
 		node.mesecons = {
 			receptor = {state = "off"},
 			effector={
@@ -129,7 +132,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		local enable_water = d.enable_water
 		local terrain_density = d.terrain_density
 		local flatland = d.flatland
-
+		local heat = minetest.get_heat(minp)
 		local miny = d.min_y
 		local maxy = d.max_y
 
@@ -203,8 +206,21 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			end
 			if typ then
 				for i2,v2 in pairs(d[typ.."_ores"]) do
-					if math.random(1,v2.chance) == 1 then
-						data[i1]=i2
+					if math.random(1,v2.chance) == 1 and not (v2.min_heat and (heat < v2.min_heat or heat > v2.max_heat)) then
+						if v2.chunk then
+							for x=-v2.chunk,v2.chunk do
+							for y=-v2.chunk,v2.chunk do
+							for z=-v2.chunk,v2.chunk do
+								local id =i1+x+(y*area.ystride)+(z*area.zstride)
+								if da == data[id] then
+									data[id]=i2
+								end
+							end
+							end
+							end
+						else
+							data[i1]=i2
+						end
 					end
 				end
 			end

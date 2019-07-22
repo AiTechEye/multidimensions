@@ -6,7 +6,7 @@ local ores={
 	["default:stone_with_mese"]=10000,
 	["default:stone_with_diamond"]=20000,
 	["default:mese"]=40000,
-	["default:gravel"]=3000
+	["default:gravel"]={chance=3000,chunk=2,}
 }
 
 local plants = {
@@ -38,7 +38,13 @@ minetest.register_node("multidimensions:acacia_tree", {drawtype="airlike",groups
 multidimensions.register_dimension("earthlike1",{
 	ground_ores = table.copy(plants),
 	stone_ores = table.copy(ores),
-	sand_ores={["default:clay"]=100},
+	sand_ores={["default:clay"]={chunk=2,chance=5000}},
+	grass_ores={
+		["default:dirt_with_snow"]={chance=1,max_heat=20},
+	},
+	water_ores={
+		["default:ice"]={chance=1,max_heat=20},
+	},
 	node={description="Alternative earth"},
 	craft = {
 		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
@@ -50,7 +56,7 @@ multidimensions.register_dimension("earthlike1",{
 multidimensions.register_dimension("earthlike2",{
 	ground_ores = table.copy(plants),
 	stone_ores = table.copy(ores),
-	sand_ores={["default:clay"]=100},
+	sand_ores={["default:clay"]={chunk=2,chance=5000}},
 	node={description="Alternative earth 2"},
 	map={spread={x=20,y=18,z=20}},
 	ground_limit=550,
