@@ -1,6 +1,6 @@
 # multidimensions
 Licenses: code: LGPL-2.1, media: CC BY-SA-4.0  
-Version: 1.95  
+Version: 2 
 
 Multi dimensions
 This mod adds a few dimensions to the game (you can add more)
