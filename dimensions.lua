@@ -28,6 +28,13 @@ local plants = {
 	["multidimensions:pine_tree"] = 1000,
 }
 
+minetest.register_node("multidimensions:tree", {drawtype="airlike",groups = {multidimensions_tree=1,not_in_creative_inventory=1},})
+minetest.register_node("multidimensions:pine_tree", {drawtype="airlike",groups = {multidimensions_tree=1,not_in_creative_inventory=1},})
+minetest.register_node("multidimensions:pine_treesnow", {drawtype="airlike",groups = {multidimensions_tree=1,not_in_creative_inventory=1},})
+minetest.register_node("multidimensions:jungle_tree", {drawtype="airlike",groups = {multidimensions_tree=1,not_in_creative_inventory=1},})
+minetest.register_node("multidimensions:aspen_tree", {drawtype="airlike",groups = {multidimensions_tree=1,not_in_creative_inventory=1},})
+minetest.register_node("multidimensions:acacia_tree", {drawtype="airlike",groups = {multidimensions_tree=1,not_in_creative_inventory=1},})
+
 multidimensions.register_dimension("earthlike1",{
 	ground_ores = table.copy(plants),
 	stone_ores = table.copy(ores),
@@ -161,31 +168,6 @@ multidimensions.register_dimension("flatland",{
 		{"default:dirt","default:mese","default:dirt",},
 		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
 	}
-})
-
-minetest.register_node("multidimensions:tree", {
-	drawtype="airlike",
-	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
-})
-minetest.register_node("multidimensions:pine_tree", {
-	drawtype="airlike",
-	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
-})
-minetest.register_node("multidimensions:pine_treesnow", {
-	drawtype="airlike",
-	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
-})
-minetest.register_node("multidimensions:jungle_tree", {
-	drawtype="airlike",
-	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
-})
-minetest.register_node("multidimensions:aspen_tree", {
-	drawtype="airlike",
-	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
-})
-minetest.register_node("multidimensions:acacia_tree", {
-	drawtype="airlike",
-	groups = {multidimensions_tree=1,not_in_creative_inventory=1},
 })
 
 minetest.register_lbm({
