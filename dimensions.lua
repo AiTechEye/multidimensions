@@ -152,8 +152,16 @@ multidimensions.register_dimension("sandstone",{
 	}
 })
 
-
-
+multidimensions.register_dimension("flatland",{
+	enable_water=false,
+	dirt="default:stone",
+	flatland=true,
+	craft = {
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+		{"default:dirt","default:mese","default:dirt",},
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	}
+})
 
 minetest.register_node("multidimensions:tree", {
 	drawtype="airlike",
