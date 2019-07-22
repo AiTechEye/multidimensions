@@ -33,7 +33,7 @@ eeverything can be nil, except the name
 multidimensions.register_dimension("name",{
   ground_ores = {
     ["defalt:tree"] = 1000,             -- (chance) ... spawns on ground, used by trees, grass, flowers...
-     ["defalt:stone"] = {chance=1000}, 	-- same as above
+    ["defalt:stone"] = {chance=1000}, 	-- same as above
   },
   stone_ores = {},     	     -- works as above, but in stone
   dirt_ores = {},
