@@ -22,3 +22,59 @@ Used settings:
 unlimited_player_transfer_distance=false
 player_transfer_distance=50
 [Main manu[--> [Settings[ --> [Advanced Settings[ --> [Server / Singleplayer[ --> [Game]
+
+
+---
+# The API
+
+eeverything can be nil, except the name
+
+
+multidimensions.register_dimension("name",{
+	ground_ores = {
+    ["defalt:tree"] = 1000, -- (chance) ... spawns on ground, used by trees, grass, flowers...
+    ["defalt:stone"] = {chance=1000}, -- same as above
+  },
+  stone_ores = {},     -- works as above, but in stone
+  dirt_ores = {},
+  grass_ores = {},
+  air_ores = {},
+  water_ores = {},
+  sand_ores = {},
+
+  min_y = 2000,             -- dimension start (don't change if you don't know what you're doing)
+  max_y = 3000,             -- dimension end (don't change if you don't know what you're doing)
+  dirt_start 501,           -- when dirt begins to appear (default is 501)
+  dirt_depth = 3,
+  ground_limit = 3530,
+  water_depth = 8,
+  enable_water = nil,      -- (false)
+  terrain_density = 0.4,
+  flatland = nil,         -- (false)
+  teleporter = nil,       -- (false)
+  
+  stone = "default:stone",
+  dirt = "default:dirt",
+  grass = "default:dirt_with_grass",
+  air = "air",
+  water = "default:water_source",
+  sand = "default:sand",
+  bedrock = "multidimensions:bedrock", -- at dimension edges
+  
+  map = {
+    offset = 0,
+    scale = 1,
+    spread = {x=100,y=18,z=100},
+    seeddiff = 24,
+    octaves = 5,
+    persist = 0.7,
+    lacunarity = 1,
+    flags = "absvalue",
+   },
+   
+	craft = { -- teleport craft recipe
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+		{"default:wood","default:mese","default:wood",},
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	}
+})
