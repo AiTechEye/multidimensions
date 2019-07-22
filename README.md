@@ -2,7 +2,7 @@
 Licenses: code: LGPL-2.1, media: CC BY-SA-4.0  
 Version: 1.95  
 
-# the info is currently incorrect, changing it later
+# the info is currently incorrect, changing it later, but the mod is fully working
 
 
 
