@@ -1,4 +1,0 @@
-
-Ny mapp\init.lua getpos  
-Ny mapp\tools.lua getpos  setpos  
-
