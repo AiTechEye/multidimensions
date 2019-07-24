@@ -32,9 +32,9 @@ eeverything can be nil, except the name
 
 multidimensions.register_dimension("name",{
   ground_ores = {
-    ["defalt:tree"] = 1000,            		 -- (chance) ... spawns on ground, used by trees, grass, flowers...
-    ["defalt:stone"] = {chance=1000}, 		 -- same as above
-    ["defalt:dirt_with_snow"] = {
+    ["default:tree"] = 1000,            		 -- (chance) ... spawns on ground, used by trees, grass, flowers...
+    ["default:stone"] = {chance=1000}, 		 -- same as above
+    ["default:dirt_with_snow"] = {
     				chance=5000,	-- chance
 				min_heat=10,	-- min heat
 				max_heat=40,	-- max heat
