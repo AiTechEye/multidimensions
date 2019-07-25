@@ -20,10 +20,6 @@ end
 
 multidimensions.form=function(player,object)
 	local name=player:get_player_name()
-	local buttons=""
-	local y=1
-	local x=3
-	local n=2
 	local info=""
 	multidimensions.user[name]={}
 	multidimensions.user[name].pos=object:get_pos()
@@ -35,22 +31,16 @@ multidimensions.form=function(player,object)
 	else
 		info="Teleport object"
 	end
-	buttons="button_exit[0,1;3,1;earth;earth]"
+	local list = "earth"
+	local d = {"earth"}
 	for i, but in pairs(multidimensions.registered_dimensions) do
-		buttons=buttons .."button_exit[" .. x.. "," .. y .. ";3,1;" .. i .. ";" .. i .. "]"
-		if x==3 then
-			y=y+1
-			x=0
-		else
-			x=3
-		end
-		n=n+1
+		list = list .. ","..i
+		table.insert(d,i)
 	end
-	local gui=""
-	gui=""
-	.."size[6.5," .. (y+1) .."]"
-	.."label[2,0;" .. info .."]" 
-	..buttons
+	multidimensions.user[name].dims = d
+	local gui="size[3.5,5.5]"..
+	"label[0,-0.2;" .. info .."]"..
+	"textlist[0,0.5;3,5;list;" .. list .."]"
 	minetest.after(0.1, function(gui)
 		return minetest.show_formspec(player:get_player_name(), "multidimensions.form",gui)
 	end, gui)
@@ -59,25 +49,26 @@ end
 minetest.register_on_player_receive_fields(function(player, form, pressed)
 	if form=="multidimensions.form" then
 		local name=player:get_player_name()
-		local pos=multidimensions.user[name].pos
-		local object=multidimensions.user[name].object
-		local y=0
-		local pos=object:get_pos()
-		multidimensions.user[name]=nil
-
-		if pressed.earth then
-			multidimensions.move(object,{x=pos.x,y=0,z=pos.z})
+		if pressed.quit then
+			multidimensions.user[name]=nil
 			return
 		end
-
-		for i, v in pairs(multidimensions.registered_dimensions) do
-			local pos2={x=pos.x,y=v.dirt_start+v.dirt_depth+1,z=pos.z}
-			if pressed[i] and minetest.is_protected(pos2, name)==false then
+		local pos=multidimensions.user[name].pos
+		local object=multidimensions.user[name].object
+		local dims = multidimensions.user[name].dims
+		local dim = pressed.list and tonumber(pressed.list:sub(5,-1)) or 0
+		local pos=object:get_pos()
+		local d = multidimensions.registered_dimensions[dims[dim]]
+		if not d then
+			multidimensions.move(object,{x=pos.x,y=0,z=pos.z})
+		else
+			local pos2={x=pos.x,y=d.dirt_start+d.dirt_depth+1,z=pos.z}
+			if d and minetest.is_protected(pos2, name)==false then
 				multidimensions.move(object,pos2)
-				return
 			end
 		end
-		return
+		multidimensions.user[name]=nil
+		minetest.close_formspec(name,"multidimensions.form")
 	end
 end)
 
