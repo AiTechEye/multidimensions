@@ -115,7 +115,7 @@ end)
 multidimensions.apply_gravity=function(player)
 	local p = player:get_pos()
 	for i, v in pairs(multidimensions.registered_dimensions) do
-		if p.y <v.max_y and p.y > v.min_y then
+		if p.y < v.dim_y and p.y > v.dim_y+v.dim_height then
 			player:set_physics_override({gravity=v.gravity})
 			return
 		end

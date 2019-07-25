@@ -1,14 +1,22 @@
 multidimensions.register_dimension=function(name,def)
-	multidimensions.dim_num = multidimensions.dim_num +1
 
-	def = def or			{}
+	local y = multidimensions.first_dimensions_appear_at
+	for i,v in pairs(multidimensions.registered_dimensions) do
+		if v.dim_y >= multidimensions.calculating_dimensions_from_min_y then
+			y = y + v.dim_height
+		end
+	end
 
-	def.min_y = def.min_y or			multidimensions.dim_num*1000
-	def.max_y = def.max_y or			(multidimensions.dim_num+1)*1000
+	def = def or				{}
 
-	def.dirt_start = (def.dirt_start or		501) + def.min_y
-	def.dirt_depth = (def.dirt_depth or		3)
-	def.ground_limit = (def.ground_limit or		530) + def.min_y
+	def.dim_y = def.dim_y or			y
+	def.dim_height = def.dim_height or		1000
+
+
+	def.bedrock_depth = 50
+	def.dirt_start = def.dim_y +			(def.dirt_start or 501)
+	def.dirt_depth =				(def.dirt_depth or 3)
+	def.ground_limit = def.dim_y +		(def.ground_limit or 530)
 	def.water_depth = def.water_depth or		8
 	def.enable_water = def.enable_water == nil
 	def.terrain_density = def.terrain_density or	0.4
@@ -40,6 +48,9 @@ multidimensions.register_dimension=function(name,def)
 	--def.air_ores {}
 	--def.water_ores {}
 	--def.sand_ores {}
+
+	--on_generate=function(data,id,cdata,area,x,y,z)
+
 
 	for i1,v1 in pairs(table.copy(def)) do
 		if i1:sub(-5,-1) == "_ores" then
@@ -120,7 +131,7 @@ end
 
 minetest.register_on_generated(function(minp, maxp, seed)
 	for i,d in pairs(multidimensions.registered_dimensions) do
-	if minp.y> d.min_y and maxp.y< d.max_y then
+	if minp.y >= d.dim_y and maxp.y <= d.dim_y+d.dim_height then
 		local depth = 18
 		local height = d.dirt_start
 		local ground_limit = d.ground_limit
@@ -133,8 +144,9 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		local terrain_density = d.terrain_density
 		local flatland = d.flatland
 		local heat = minetest.get_heat(minp)
-		local miny = d.min_y
-		local maxy = d.max_y
+		local miny = d.dim_y
+		local maxy = d.dim_y+d.dim_height
+		local bedrock_depth = d.bedrock_depth
 
 		local dirt = d.dirt
 		local stone =d.stone
@@ -143,6 +155,24 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		local water = d.water
 		local sand = d.sand
 		local bedrock = d.bedrock
+
+		local cdata = {
+			dim_start = d.dim_y,
+			dim_end = d.dim_y+d.dim_height,
+			dirt_start = height,
+			ground_limit = d.ground_limit,
+			dim_y = d.dim_y,
+			heat = heat,
+			dirt = d.dirt,
+			stone =d.stone,
+			grass = d.grass,
+			air = d.air,
+			water = d.water,
+			sand = d.sand,
+			bedrock = d.bedrock,
+			blocking = minetest.get_content_id("multidimensions:blocking"),
+			killing = minetest.get_content_id("multidimensions:killing"),
+		}
 
 		local vm,min,max = minetest.get_mapgen_object("voxelmanip")
 		local area = VoxelArea:new({MinEdge = min, MaxEdge = max})
@@ -153,8 +183,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			local id=area:index(minp.x,y,z)
 		for x=minp.x,maxp.x do
 			local den = math.abs(map[cindx]) - math.abs(height-y)/(depth*2) or 0
-
-			if y == miny or y == maxy then
+			if y <= miny+bedrock_depth then
 				data[id] = bedrock
 			elseif enable_water and den < 0.3 and y <= height+d.dirt_depth+1 and y >= height-water_depth  then	
 				data[id] = water
@@ -180,6 +209,11 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			else
 				data[id] = air
 			end
+
+			if d.on_generate then
+				data = d.on_generate(data,id,cdata,area,x,y,z) or data
+			end
+
 			cindx=cindx+1
 			id=id+1
 		end
@@ -240,9 +274,33 @@ minetest.register_node("multidimensions:bedrock", {
 	sunlight_propagates = true,
 	drop = "",
 	diggable = false,
-	is_ground_content = false,
 	sounds = default.node_sound_stone_defaults(),
 })
+
+minetest.register_node("multidimensions:blocking", {
+	description = "Blocking",
+	drawtype="airlike",
+	groups = {unbreakable=1,not_in_creative_inventory = 1,fall_damage_add_percent=1000},
+	paramtype = "light",
+	sunlight_propagates = true,
+	drop = "",
+	pointable=false,
+	diggable = false,
+})
+
+minetest.register_node("multidimensions:killing", {
+	description = "Killing",
+	drawtype="airlike",
+	groups = {unbreakable=1,not_in_creative_inventory = 1},
+	paramtype = "light",
+	sunlight_propagates = true,
+	drop = "",
+	walkable=false,
+	damage_per_second = 9000,
+	pointable=false,
+	diggable = false,
+})
+
 
 if multidimensions.limited_chat then
 minetest.register_on_chat_message(function(name, message)

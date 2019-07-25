@@ -68,6 +68,41 @@ multidimensions.register_dimension("earthlike2",{
 	}
 })
 
+multidimensions.register_dimension("floatandlike",{
+	ground_ores = table.copy(plants),
+	stone_ores = table.copy(ores),
+	node={description="Alternative floatand"},
+	ground_limit=550,
+	craft = {
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+		{"default:dirt","default:mese","default:dirt",},
+		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
+	},
+	map={
+		spread={x=30,y=30,z=30},
+		octaves=3,
+		persist=0.2,
+		lacunarity=2,
+		flags="eased",
+	},
+	terrain_density=0.2,
+	enable_water=false,
+	on_generate=function(data,id,cdata,area,x,y,z)
+		if y <= cdata.dirt_start-70 then
+			data[id] = cdata.killing
+		elseif y <= cdata.dirt_start-100 then
+			data[id] = cdata.blocking
+		elseif y <= cdata.dirt_start+5 then
+			data[id] = cdata.air
+		else
+			return
+		end
+		return data
+	end,
+})
+
+
+
 multidimensions.register_dimension("savana",{
 	ground_ores = {
 		["default:dry_shrub"]=50,
