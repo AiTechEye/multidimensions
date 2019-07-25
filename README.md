@@ -1,6 +1,6 @@
 # multidimensions
 Licenses: code: LGPL-2.1, media: CC BY-SA-4.0  
-Version: 2 
+Version: 2.1
 
 Multi dimensions
 This mod adds a few dimensions to the game (you can add more)
@@ -49,8 +49,10 @@ multidimensions.register_dimension("name",{
   water_ores = {},
   sand_ores = {},
 
-  min_y = 2000,             -- dimension start (don't change if you don't know what you're doing)
-  max_y = 3000,             -- dimension end (don't change if you don't know what you're doing)
+  dim_y = 2000,             -- dimension start (don't change if you don't know what you're doing)
+  dim_height =  1000,	    -- dimension height
+  
+  
   dirt_start 501,           -- when dirt begins to appear (default is 501)
   dirt_depth = 3,	    -- dirt depth
   ground_limit = 530,	    -- ground y limit (ground ends here)
@@ -85,5 +87,14 @@ multidimensions.register_dimension("name",{
 	{"default:wood","default:mese","default:wood",},
 	{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
    }
+
+   on_generate=function(data,index,cdata,area,x,y,z)
+   end
+   -- data: active generating area (VoxelArea)
+   -- index: data index
+   -- cdata: {dim_start, dim_end, dirt_start, ground_limit, dim_y, heat, dirt, stone, grass, air, water, sand, bedrock, blocking, killing}
+    area: (VoxelArea:new({MinEd...)
+   
+   
 })
 ```
