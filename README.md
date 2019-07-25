@@ -88,8 +88,15 @@ multidimensions.register_dimension("name",{
 	{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
    }
 
-   on_generate=function(data,index,cdata,area,x,y,z)
-   end
+   on_generate=function(data,id,cdata,area,x,y,z)
+	if y <= cdata.dirt_start+5 then
+		data[id] = cdata.air
+	else
+		return
+	end
+	return data -- to return changes
+   end,
+   
    -- data: active generating area (VoxelArea)
    -- index: data index
    -- cdata: {dim_start, dim_end, dirt_start, ground_limit, dim_y, heat, dirt, stone, grass, air, water, sand, bedrock, blocking, killing}
