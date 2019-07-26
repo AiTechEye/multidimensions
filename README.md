@@ -35,7 +35,7 @@ multidimensions.register_dimension("name",{
   ground_ores = {
     ["default:tree"] = 1000,            -- (chance) ... spawns on ground, used by trees, grass, flowers...
     ["default:stone"] = {chance=1000}, 	-- same as above
-    ["default:dirt_with_snow"] = {
+    ["default:dirt_with_snow"] = {	-- names will be remade to content_id
     	chance=5000,	     -- chance
 	min_heat=10,	     -- min heat
 	max_heat=40,	     -- max heat
@@ -48,7 +48,9 @@ multidimensions.register_dimension("name",{
   air_ores = {},
   water_ores = {},
   sand_ores = {},
-
+  
+  self = {},		    -- new in 2.2, can contain everything
+  
   dim_y = 2000,             -- dimension start (don't change if you don't know what you're doing)
   dim_height =  1000,	    -- dimension height
   
@@ -88,9 +90,9 @@ multidimensions.register_dimension("name",{
 	{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
    }
 
-   on_generate=function(data,id,cdata,area,x,y,z)
-	if y <= cdata.dirt_start+5 then
-		data[id] = cdata.air
+   on_generate=function(self,data,id,area,x,y,z)
+	if y <= self.dirt_start+5 then
+		data[id] = self.air
 	else
 		return
 	end
@@ -99,7 +101,7 @@ multidimensions.register_dimension("name",{
    
    -- data: active generating area (VoxelArea)
    -- index: data index
-   -- cdata: {dim_start, dim_end, dirt_start, ground_limit, dim_y, heat, dirt, stone, grass, air, water, sand, bedrock, blocking, killing}
+   -- self: {dim_start, dim_end, dim_height, ground_limit, heat, humidity, dirt, stone, grass, air, water, sand, bedrock ... and your inputs
     area: (VoxelArea:new({MinEd...)
    
    
