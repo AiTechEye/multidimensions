@@ -44,7 +44,6 @@ multidimensions.register_dimension=function(name,def,self)
 	def.self.dim_start = def.dim_y
 	def.self.dim_end = def.dim_y+def.dim_height
 	def.self.dim_height = def.dim_height
-	def.self.dirt_start = def.dirt_start
 	def.self.ground_limit = def.ground_limit
 	
 	--def.stone_ores {}
