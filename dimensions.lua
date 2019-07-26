@@ -87,13 +87,17 @@ multidimensions.register_dimension("floatandlike",{
 	},
 	terrain_density=0.2,
 	enable_water=false,
-	on_generate=function(data,id,cdata,area,x,y,z)
-		if y <= cdata.dirt_start-70 then
-			data[id] = cdata.killing
-		elseif y <= cdata.dirt_start-100 then
-			data[id] = cdata.blocking
-		elseif y <= cdata.dirt_start+5 then
-			data[id] = cdata.air
+	self={
+		blocking="multidimensions:blocking",
+		killing = "multidimensions:killing",
+	},
+	on_generate=function(self,data,id,area,x,y,z)
+		if y <= self.dirt_start-70 then
+			data[id] = self.killing
+		elseif y <= self.dirt_start-100 then
+			data[id] = self.blocking
+		elseif y <= self.dirt_start+5 then
+			data[id] = self.air
 		else
 			return
 		end

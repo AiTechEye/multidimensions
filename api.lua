@@ -1,4 +1,4 @@
-multidimensions.register_dimension=function(name,def)
+multidimensions.register_dimension=function(name,def,self)
 
 	local y = multidimensions.first_dimensions_appear_at
 	for i,v in pairs(multidimensions.registered_dimensions) do
@@ -8,10 +8,10 @@ multidimensions.register_dimension=function(name,def)
 	end
 
 	def = def or				{}
+	def.self = def.self or			{}
 
 	def.dim_y = def.dim_y or			y
 	def.dim_height = def.dim_height or		1000
-
 
 	def.bedrock_depth = 50
 	def.dirt_start = def.dim_y +			(def.dirt_start or 501)
@@ -23,14 +23,6 @@ multidimensions.register_dimension=function(name,def)
 	def.flatland = def.flatland		
 	def.gravity = def.gravity or			1
 
-	def.stone = minetest.get_content_id(def.stone or "default:stone")
-	def.dirt = minetest.get_content_id(def.dirt or "default:dirt")
-	def.grass = minetest.get_content_id(def.grass or "default:dirt_with_grass")
-	def.air = minetest.get_content_id(def.air or "air")
-	def.water = minetest.get_content_id(def.water or "default:water_source")
-	def.sand = minetest.get_content_id(def.sand or "default:sand")
-	def.bedrock = minetest.get_content_id(def.bedrock or "multidimensions:bedrock")
-
 	def.map = def.map or {}
 	def.map.offset = def.map.offset or 0
 	def.map.scale = def.map.scale or 1
@@ -41,6 +33,20 @@ multidimensions.register_dimension=function(name,def)
 	def.map.lacunarity = def.map.lacunarity or 1
 	def.map.flags = def.map.flags or "absvalue"
 
+	def.self.stone = def.stone or "default:stone"
+	def.self.dirt = def.dirt or "default:dirt"
+	def.self.grass = def.grass or "default:dirt_with_grass"
+	def.self.air = def.air or "air"
+	def.self.water = def.water or "default:water_source"
+	def.self.sand = def.sand or "default:sand"
+	def.self.bedrock = def.bedrock or "multidimensions:bedrock"
+
+	def.self.dim_start = def.dim_y
+	def.self.dim_end = def.dim_y+def.dim_height
+	def.self.dim_height = def.dim_height
+	def.self.dirt_start = def.dirt_start
+	def.self.ground_limit = def.ground_limit
+	
 	--def.stone_ores {}
 	--def.dirt_ores {}
 	--def.grass_ores {}
@@ -48,12 +54,15 @@ multidimensions.register_dimension=function(name,def)
 	--def.air_ores {}
 	--def.water_ores {}
 	--def.sand_ores {}
-
 	--on_generate=function(data,id,cdata,area,x,y,z)
 
 
+	for i,v in pairs(table.copy(def.self)) do
+		def.self[i] = minetest.registered_items[v] and minetest.get_content_id(v) or def.self[i]
+	end
+
 	for i1,v1 in pairs(table.copy(def)) do
-		if i1:sub(-5,-1) == "_ores" then
+		if  i1:sub(-5,-1)== "_ores" then
 			for i2,v2 in pairs(v1) do
 				local n = minetest.get_content_id(i2)
 				def[i1][n] = {}
@@ -84,7 +93,6 @@ multidimensions.register_dimension=function(name,def)
 
 	def.node = nil
 	def.craft = nil
-
 
 	multidimensions.registered_dimensions[name]=def
 
@@ -144,35 +152,22 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		local terrain_density = d.terrain_density
 		local flatland = d.flatland
 		local heat = minetest.get_heat(minp)
+		local humidity = minetest.get_humidity(minp)
+
 		local miny = d.dim_y
 		local maxy = d.dim_y+d.dim_height
 		local bedrock_depth = d.bedrock_depth
 
-		local dirt = d.dirt
-		local stone =d.stone
-		local grass = d.grass
-		local air = d.air
-		local water = d.water
-		local sand = d.sand
-		local bedrock = d.bedrock
+		local dirt = d.self.dirt
+		local stone =d.self.stone
+		local grass = d.self.grass
+		local air = d.self.air
+		local water = d.self.water
+		local sand = d.self.sand
+		local bedrock = d.self.bedrock
 
-		local cdata = {
-			dim_start = d.dim_y,
-			dim_end = d.dim_y+d.dim_height,
-			dirt_start = height,
-			ground_limit = d.ground_limit,
-			dim_y = d.dim_y,
-			heat = heat,
-			dirt = d.dirt,
-			stone =d.stone,
-			grass = d.grass,
-			air = d.air,
-			water = d.water,
-			sand = d.sand,
-			bedrock = d.bedrock,
-			blocking = minetest.get_content_id("multidimensions:blocking"),
-			killing = minetest.get_content_id("multidimensions:killing"),
-		}
+		d.self.heat = heat
+		d.self.humidity = humidity
 
 		local vm,min,max = minetest.get_mapgen_object("voxelmanip")
 		local area = VoxelArea:new({MinEdge = min, MaxEdge = max})
@@ -203,7 +198,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 					data[id+area.ystride]=grass
 					data[id-area.ystride]=stone
 					if den > 1 then
-						data[id]=d.stone
+						data[id]=stone
 					end
 				end
 			else
@@ -211,7 +206,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			end
 
 			if d.on_generate then
-				data = d.on_generate(data,id,cdata,area,x,y,z) or data
+				data = d.on_generate(d.self,data,id,area,x,y,z) or data
 			end
 
 			cindx=cindx+1
