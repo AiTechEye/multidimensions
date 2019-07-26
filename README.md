@@ -49,7 +49,7 @@ multidimensions.register_dimension("name",{
   water_ores = {},
   sand_ores = {},
   
-  self = {},		    -- new in 2.2, can contain everything
+  self = {},		    -- can contain everything, var like dirt="default:dirt" will be remade to dirt=content_id
   
   dim_y = 2000,             -- dimension start (don't change if you don't know what you're doing)
   dim_height =  1000,	    -- dimension height
