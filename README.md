@@ -30,6 +30,8 @@ player_transfer_distance=50
 everything can be nil, except the name
 ```lua
 
+multidimensions.clear_dimensions() -- clear all dimensions
+
 multidimensions.register_dimension("name",{
 
   ground_ores = {
