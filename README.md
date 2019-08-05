@@ -104,6 +104,13 @@ multidimensions.register_dimension("name",{
    -- self: {dim_start, dim_end, dim_height, ground_limit, heat, humidity, dirt, stone, grass, air, water, sand, bedrock ... and your inputs
     area: (VoxelArea:new({MinEd...)
    
+   sky = {{r=219, g=168, b=117},"plain",{}}, -- same as:set_sky()
+   
+   on_enter=function(player) --on enter dimension
+   end,
+   
+   on_leave=function(player) --on leave dimension
+   end,
    
 })
 ```
