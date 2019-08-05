@@ -6,7 +6,6 @@ multidimensions={
 	limeted_nametag=true,
 	remake_home=true,
 	remake_bed=true,
-	dimensions={},
 	user={},
 	player_pos={},
 	earth = {

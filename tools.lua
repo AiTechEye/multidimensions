@@ -3,6 +3,10 @@ minetest.register_privilege("dimensions", {
 	give_to_singleplayer= false,
 })
 
+multidimensions.clear_dimensions=function()
+	multidimensions.registered_dimensions = {}
+end
+
 minetest.register_alias("dim", "multidimensions:teleporttool")
 
 multidimensions.setrespawn=function(object,pos)
