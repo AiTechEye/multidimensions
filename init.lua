@@ -8,6 +8,11 @@ multidimensions={
 	remake_bed=true,
 	dimensions={},
 	user={},
+	player_pos={},
+	earth = {
+		above=31000,
+		under=-31000,
+	},
 	craftable_teleporters=true,
 	registered_dimensions={},
 	first_dimensions_appear_at = 2000,

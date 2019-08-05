@@ -22,6 +22,7 @@ multidimensions.register_dimension=function(name,def,self)
 	def.terrain_density = def.terrain_density or	0.4
 	def.flatland = def.flatland		
 	def.gravity = def.gravity or			1
+	--def.sky = def.sky
 
 	def.map = def.map or {}
 	def.map.offset = def.map.offset or 0
@@ -45,7 +46,7 @@ multidimensions.register_dimension=function(name,def,self)
 	def.self.dim_end = def.dim_y+def.dim_height
 	def.self.dim_height = def.dim_height
 	def.self.ground_limit = def.ground_limit
-	
+	def.self.dirt_start = def.dirt_start
 	--def.stone_ores {}
 	--def.dirt_ores {}
 	--def.grass_ores {}
@@ -133,6 +134,11 @@ multidimensions.register_dimension=function(name,def,self)
 				recipe = craft,
 			})
 		end
+	end
+	if def.dim_y > 0 and def.dim_y < multidimensions.earth.above then
+		multidimensions.earth.above = def.dim_y
+	elseif def.dim_y < 0 and def.dim_y+def.dim_height > multidimensions.earth.under then
+		multidimensions.earth.under = def.dim_y+def.dim_height
 	end
 end
 

@@ -61,10 +61,16 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 		local d = multidimensions.registered_dimensions[dims[dim]]
 		if not d then
 			multidimensions.move(object,{x=pos.x,y=0,z=pos.z})
+			if object:is_player() then
+				multidimensions.apply_dimension(object)
+			end
 		else
 			local pos2={x=pos.x,y=d.dirt_start+d.dirt_depth+1,z=pos.z}
 			if d and minetest.is_protected(pos2, name)==false then
 				multidimensions.move(object,pos2)
+				if object:is_player() then
+					multidimensions.apply_dimension(object)
+				end
 			end
 		end
 		multidimensions.user[name]=nil
@@ -97,21 +103,49 @@ end
 })
 
 minetest.register_on_respawnplayer(function(player)
-	multidimensions.apply_gravity(player)
+	multidimensions.apply_dimension(player)
 end)
 minetest.register_on_joinplayer(function(player)
-	multidimensions.apply_gravity(player)
+	multidimensions.apply_dimension(player)
+end)
+minetest.register_on_leaveplayer(function(player)
+	multidimensions.player_pos[player:get_player_name()] = nil
 end)
 
-multidimensions.apply_gravity=function(player)
+multidimensions.apply_dimension=function(player)
 	local p = player:get_pos()
+	local name = player:get_player_name()
+	local pp = multidimensions.player_pos[name]
+	if pp and p.y > pp.y1 and p.y < pp.y2 then
+		return
+	elseif pp then
+		local od = multidimensions.registered_dimensions[pp.name]
+		if od and od.on_leave then
+			od.on_leave(player)
+		end
+	end
 	for i, v in pairs(multidimensions.registered_dimensions) do
-		if p.y < v.dim_y and p.y > v.dim_y+v.dim_height then
+		if p.y > v.dim_y and p.y < v.dim_y+v.dim_height then
+			multidimensions.player_pos[name] = {y1 = v.dim_y, y2 = v.dim_y+v.dim_height, name=i}
 			player:set_physics_override({gravity=v.gravity})
+			if v.sky then
+				player:set_sky(v.sky[1],v.sky[2],v.sky[3])
+			else
+				player:set_sky(nil,"regular",nil)
+			end
+			if v.on_enter then
+				v.on_enter(player)
+			end
 			return
 		end
 	end
 	player:set_physics_override({gravity=1})
+	player:set_sky(nil,"regular",nil)
+	multidimensions.player_pos[name] = {
+		y1 = multidimensions.earth.under,
+		y2 = multidimensions.earth.above,
+		name=""
+	}
 end
 
 multidimensions.move=function(object,pos)
@@ -153,7 +187,7 @@ minetest.register_globalstep(function(dtime)
 	if capg > 2 then
 		capg=0
 		for _, player in pairs(minetest.get_connected_players()) do
-			multidimensions.apply_gravity(player)
+			multidimensions.apply_dimension(player)
 		end
 	end
 end)

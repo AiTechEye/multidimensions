@@ -156,7 +156,8 @@ multidimensions.register_dimension("desert",{
 		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
 		{"default:desert_stone","default:mese","default:desert_stone",},
 		{"default:obsidianbrick", "default:steel_ingot", "default:obsidianbrick"},
-	}
+	},
+	sky={{r=219, g=168, b=117},"plain",{}},
 })
 
 multidimensions.register_dimension("hot",{
