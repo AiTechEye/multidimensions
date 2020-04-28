@@ -104,13 +104,27 @@ multidimensions.register_dimension=function(name,def,self)
 		node.after_place_node = function(pos, placer, itemstack)
 			local meta=minetest.get_meta(pos)
 			meta:set_string("owner",placer:get_player_name())
-			meta:set_string("infotext",node.description)		
+			meta:set_string("infotext",node.description)
 		end
 		node.on_rightclick = function(pos, node, player, itemstack, pointed_thing)
-			local owner=minetest.get_meta(pos):get_string("owner")
-			local pos2={x=pos.x,y=def.dirt_start+def.dirt_depth+2,z=pos.z}
-			if not minetest.is_protected(pos2, owner) then
-				multidimensions.move(player,pos2)
+			local meta=minetest.get_meta(pos)
+			local owner=meta:get_string("owner")
+			local pos2
+
+			local sp = meta:get_string("pos")
+			if sp ~= "" then
+				pos2 = minetest.string_to_pos(sp)
+			else
+				pos2 = {x=pos.x,y=def.dirt_start+def.dirt_depth+2,z=pos.z}
+			end
+
+			if owner ~= "" and not minetest.is_protected(pos2, owner) then
+				local REset
+				if meta:get_int("re_set") == 0 then
+					meta:set_int("re_set",1)
+					REset = pos
+				end
+				multidimensions.move(player,pos2,REset)
 			end
 		end
 		node.mesecons = {
@@ -345,6 +359,33 @@ minetest.register_node("multidimensions:teleporter0", {
 		return false
 	end}},
 })
+
+minetest.register_node("multidimensions:teleporterre", {
+	description = "Teleport back",
+	tiles = {"default_steel_block.png"},
+	groups = {cracky=3},
+	is_ground_content = false,
+	sounds = default.node_sound_wood_defaults(),
+	drop = "default:cobble",
+	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+		local p = minetest.get_meta(pos):get_string("pos")
+		if p == "" then
+			minetest.remove_node(pos)
+			return
+		end
+		multidimensions.move(player,minetest.string_to_pos(p),nil,true)
+	end,
+	mesecons = {effector = {
+		action_on = function (pos, node)
+		local owner=minetest.get_meta(pos):get_string("owner")
+		local pos2={x=pos.x,y=0,z=pos.z}
+		for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
+			multidimensions.move(ob,pos2)
+		end
+		return false
+	end}},
+})
+
 
 if multidimensions.limeted_nametag==true and minetest.settings:get_bool("unlimited_player_transfer_distance")~=false then
 	minetest.settings:set_bool("unlimited_player_transfer_distance",false)

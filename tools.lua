@@ -152,36 +152,68 @@ multidimensions.apply_dimension=function(player)
 	}
 end
 
-multidimensions.move=function(object,pos)
+multidimensions.move=function(object,pos,set_re)
 	local move=false
 	object:set_pos(pos)
 	multidimensions.setrespawn(object,pos)
-	minetest.after(1, function(pos,object,move)
+
+	if set_re == nil then
+		return
+	end
+
+	minetest.set_node({x=pos.x,y=pos.y-2,z=pos.z},{name="default:cobble"})
+	minetest.after(1, function(pos,object,move,set_re)
 		for i=1,100,1 do
 			local nname=minetest.get_node(pos).name
-			if nname~="air" and nname~="ignore" then
+			if nname~="air" and nname~="ignore" and nname ~= "multidimensions:teleporterre" then
 				pos.y=pos.y+1
 				move=true
 			elseif move then
-				object:set_pos(pos)
-				multidimensions.setrespawn(object,pos)
-				break
+				minetest.set_node(pos,{name="multidimensions:teleporterre"})
+				minetest.get_meta(pos):set_string("pos",minetest.pos_to_string({x=set_re.x,y=set_re.y+1,z=set_re.z}))
+				pos.y = pos.y + 1
+				minetest.get_meta(set_re):set_string("pos",minetest.pos_to_string(pos))
+				object:set_pos({x=pos.x,y=pos.y+1,z=pos.z})
+				multidimensions.setrespawn(object,{x=pos.x,y=pos.y+1,z=pos.z})
+				return
 			end
 		end
-	end, pos,object,move)
-	minetest.after(5, function(pos,object,move)
+		pos.y = pos.y - 2
+		local reg = minetest.registered_nodes[minetest.get_node(pos).name]
+		if reg == nil or reg.walkable == false or reg.name == "default:cobble" then
+			for x = -2,2,1 do
+			for z = -2,2,1 do
+				minetest.set_node({x=pos.x+x,y=pos.y,z=pos.z+z},{name="default:cobble"})
+			end
+			end
+		end
+	end, pos,object,move,set_re)
+	minetest.after(5, function(pos,object,move,set_re)
 		for i=1,100,1 do
 			local nname=minetest.get_node(pos).name
-			if nname~="air" and nname~="ignore" then
+			if nname~="air" and nname~="ignore" and nname ~= "multidimensions:teleporterre" then
 				pos.y=pos.y+1
 				move=true
 			elseif move then
-				object:set_pos(pos)
-				multidimensions.setrespawn(object,pos)
-				break
+				minetest.set_node(pos,{name="multidimensions:teleporterre"})
+				minetest.get_meta(pos):set_string("pos",minetest.pos_to_string({x=set_re.x,y=set_re.y+1,z=set_re.z}))
+				pos.y = pos.y + 1
+				minetest.get_meta(set_re):set_string("pos",minetest.pos_to_string(pos))
+				object:set_pos({x=pos.x,y=pos.y+1,z=pos.z})
+				multidimensions.setrespawn(object,{x=pos.x,y=pos.y+1,z=pos.z})
+				return
 			end
 		end
-	end, pos,object,move)
+		pos.y = pos.y - 2
+		local reg = minetest.registered_nodes[minetest.get_node(pos).name]
+		if reg == nil or reg.walkable == false or reg.name == "default:cobble" then
+			for x = -2,2,1 do
+			for z = -2,2,1 do
+				minetest.set_node({x=pos.x+x,y=pos.y,z=pos.z+z},{name="default:cobble"})
+			end
+			end
+		end
+	end, pos,object,move,set_re)
 	return true
 end
 
