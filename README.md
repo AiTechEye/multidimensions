@@ -45,6 +45,7 @@ multidimensions.register_dimension("name",{
     },
   },
   stone_ores = {},     	     -- works as above, but in stone
+  deep_stone_ores = {},
   dirt_ores = {},
   grass_ores = {},
   air_ores = {},
@@ -55,7 +56,7 @@ multidimensions.register_dimension("name",{
   
   dim_y = 2000,             -- dimension start (don't change if you don't know what you're doing)
   dim_height =  1000,	    -- dimension height
-  
+  deep_y = 240,
   
   dirt_start 501,           -- when dirt begins to appear (default is 501)
   dirt_depth = 3,	    -- dirt depth
@@ -63,6 +64,7 @@ multidimensions.register_dimension("name",{
   water_depth = 8,	    -- depth fron ground and down
   enable_water = nil,       -- (nil = true)
   terrain_density = 0.4,    -- or ground density
+  cave_threshold = 0.075,   -- threshold below which caves carved
   flatland = nil,           -- (nil = false)
   teleporter = nil,         -- (nil = true) dimension teleporter
   gravity = 1,		    -- (1 = default) dimension gravity
@@ -84,6 +86,17 @@ multidimensions.register_dimension("name",{
     persist = 0.7,
     lacunarity = 1,
     flags = "absvalue",
+   },
+   
+   cavemap = {
+    offset = 0,
+    scale = 1,
+    spread = {x=30,y=45,z=30},
+    seeddiff = 128,
+    octaves = 5,
+    persist = 0.2,
+    lacunarity = 1.4,
+    flags = "defaults, absvalue",
    },
    
    craft = { -- teleport craft recipe
