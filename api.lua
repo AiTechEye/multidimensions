@@ -12,6 +12,7 @@ multidimensions.register_dimension=function(name,def,self)
 
 	def.dim_y = def.dim_y or			y
 	def.dim_height = def.dim_height or		1000
+	def.deep_y = def.deep_y or		200
 
 	def.bedrock_depth = 50
 	def.dirt_start = def.dim_y +			(def.dirt_start or 501)
@@ -188,7 +189,8 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		local humidity = minetest.get_humidity(minp)
 
 		local miny = d.dim_y
-		local maxy = d.dim_y+d.dim_height
+		local maxy = d.dim_y + d.dim_height
+		local deep_y = d.dim_y + d.deep_y --CBN 22/10/2022 Added a param to change the max height of deep stone ores
 		local bedrock_depth = d.bedrock_depth
 
 		local dirt = d.self.dirt
@@ -251,7 +253,15 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		end
 		end
 
+		local node_y = minp.y
+		
 		for i1,v1 in pairs(data) do
+			if i1%area.ystride == 0 then
+				node_y = node_y + 1
+			end
+			if i1%area.zstride == 0 then --CBN 22/10/2022 data moves in the x axis first, then y axis then z axis, thus when a full zstride has been completed, it goes back to the base of the area
+				node_y = minp.y
+			end
 			local da = data[i1]
 			local typ
 			if da == air and d.ground_ores and data[i1-area.ystride] == grass then
@@ -260,6 +270,8 @@ minetest.register_on_generated(function(minp, maxp, seed)
 				typ = "grass"
 			elseif da == dirt and d.dirt_ores then
 				typ = "dirt"
+			elseif da == stone and d.deep_stone_ores and node_y <= miny + deep_y then
+				typ = "deep_stone" --CBN 22/10/2022 Added deep stone ores, so that you can set two layers of ores with different chances, to encourage deep mining
 			elseif da == stone and d.stone_ores then
 				typ = "stone"
 			elseif da == air and d.air_ores then
@@ -276,7 +288,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 							for x=-v2.chunk,v2.chunk do
 							for y=-v2.chunk,v2.chunk do
 							for z=-v2.chunk,v2.chunk do
-								local id =i1+x+(y*area.ystride)+(z*area.zstride)
+								local id = i1 + x + (y * area.ystride) + (z * area.zstride)
 								if da == data[id] then
 									data[id]=i2
 								end
