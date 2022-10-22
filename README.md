@@ -1,6 +1,6 @@
 # multidimensions
 Licenses: code: LGPL-2.1, media: CC BY-SA-4.0  
-Version: 2.3
+Version: 2.4
 
 Multi dimensions
 This mod adds a few dimensions to the game (you can add more)
@@ -25,9 +25,14 @@ player_transfer_distance=50
 
 
 ---
-# The API
+# The API Documentation
 
-everything can be nil, except the name
+This mod contains an API for registering and generating new dimensions, or worlds, at different heights in the game world. For this purpose, several methods and functions have been implemented, with many parameters to customize mapgen even more.
+
+Before proceeding, one should at minimum a basic level of understanding of [Lua Programming Language](http://www.lua.org/pil/) and basic programming concepts.
+
+Below is an example of how to register a new dimension using the API:
+
 ```lua
 
 multidimensions.clear_dimensions() -- clear all dimensions
@@ -91,7 +96,7 @@ multidimensions.register_dimension("name",{
    cavemap = {
     offset = 0,
     scale = 1,
-    spread = {x=30,y=45,z=30},
+    spread = {x=70,y=30,z=70},
     seeddiff = 128,
     octaves = 5,
     persist = 0.2,
@@ -129,3 +134,9 @@ multidimensions.register_dimension("name",{
    
 })
 ```
+
+
+---
+## Methods and Functions
+
+Lorem ipsum add info here later
