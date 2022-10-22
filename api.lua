@@ -20,8 +20,10 @@ multidimensions.register_dimension=function(name,def,self)
 	def.water_depth = def.water_depth or		8
 	def.enable_water = def.enable_water == nil
 	def.terrain_density = def.terrain_density or	0.4
-	def.flatland = def.flatland		
+	def.flatland = def.flatland
 	def.gravity = def.gravity or			1
+	
+	def.cave_threshold = def.cave_threshold or 0.1 --CBN 22/10/2022 Added cave threshold to dimension definition.
 	--def.sky = def.sky
 
 	def.map = def.map or {}
@@ -33,6 +35,16 @@ multidimensions.register_dimension=function(name,def,self)
 	def.map.persist = def.map.persist or 0.7
 	def.map.lacunarity = def.map.lacunarity or 1
 	def.map.flags = def.map.flags or "absvalue"
+	
+	def.cavemap = def.cavemap or {} --CBN 22/10/2022 Added cave noise parameters to dimension definition
+	def.cavemap.offset = def.cavemap.offset or 0
+	def.cavemap.scale = def.cavemap.scale or 1
+	def.cavemap.spread = def.cavemap.spread or {x=60,y=35,z=60}
+	def.cavemap.seeddiff = def.cavemap.seeddiff or 128
+	def.cavemap.octaves = def.cavemap.octaves or 5
+	def.cavemap.persist = def.cavemap.persist or 0.2
+	def.cavemap.lacunarity = def.cavemap.lacunarity or 1.4
+	def.cavemap.flags = def.cavemap.flags or "defaults, absvalue"
 
 	def.self.stone = def.stone or "default:stone"
 	def.self.dirt = def.dirt or "default:dirt"
@@ -164,9 +176,11 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		local ground_limit = d.ground_limit
 		local dirt_depth = d.dirt_depth
 		local water_depth = d.water_depth
+		local cave_threshold = d.cave_threshold
 		local lenth = maxp.x-minp.x+1
 		local cindx = 1
 		local map = minetest.get_perlin_map(d.map,{x=lenth,y=lenth,z=lenth}):get_3d_map_flat(minp)
+		local cavemap = minetest.get_perlin_map(d.cavemap,{x=lenth,y=lenth,z=lenth}):get_3d_map_flat(minp)
 		local enable_water = d.enable_water
 		local terrain_density = d.terrain_density
 		local flatland = d.flatland
@@ -191,28 +205,27 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		local vm,min,max = minetest.get_mapgen_object("voxelmanip")
 		local area = VoxelArea:new({MinEdge = min, MaxEdge = max})
 		local data = vm:get_data()
-
 		for z=minp.z,maxp.z do
 		for y=minp.y,maxp.y do
-			local id=area:index(minp.x,y,z)
-		for x=minp.x,maxp.x do
+			local id = area:index(minp.x,y,z)
+		for x=minp.x,maxp.x do	
 			local den = math.abs(map[cindx]) - math.abs(height-y)/(depth*2) or 0
 			if y <= miny+bedrock_depth then
 				data[id] = bedrock
-			elseif enable_water and den < 0.3 and y <= height+d.dirt_depth+1 and y >= height-water_depth  then	
+			elseif y < height and y > miny + bedrock_depth then --CBN 22/10/2022 Fill air pockets
+				data[id] = stone
+			elseif enable_water and den <= terrain_density and y <= height+d.dirt_depth+1 and y >= height-water_depth  then	--CBN 22/10/2022 Bind water generation
 				data[id] = water
 				if y+1 == height+d.dirt_depth+1 then -- fix water holes
 					data[id+area.ystride] = water
-				else
+				elseif not (data[id-area.ystride * 2] == water) then --CBN 21/10/2022 Fix intermitent horizontal layers of sand and water
 					data[id-area.ystride]=sand
 				end
-			elseif y < height then
-				data[id] = stone
 			elseif y >= height and y <= height+dirt_depth then
 				data[id] = dirt
 				data[id+area.ystride]=grass
 			elseif not flatland then
-				if y >= height and y<= ground_limit and den > terrain_density then
+				if y >= height and y<= ground_limit and den >= terrain_density then
 					data[id] = dirt
 					data[id+area.ystride]=grass
 					data[id-area.ystride]=stone
@@ -223,7 +236,11 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			else
 				data[id] = air
 			end
-
+			
+			if y < ground_limit and y > miny + bedrock_depth and cavemap[cindx] <= cave_threshold then --CBN 22/10/2022 Cave carving
+				data[id] = air
+			end
+			
 			if d.on_generate then
 				data = d.on_generate(d.self,data,id,area,x,y,z) or data
 			end
