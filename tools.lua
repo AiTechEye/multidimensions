@@ -227,3 +227,60 @@ minetest.register_globalstep(function(dtime)
 		end
 	end
 end)
+
+if minetest.get_modpath("default") then
+	minetest.register_node("multidimensions:teleporter0", {
+		description = "Teleport to dimension earth",
+		tiles = {"default_steel_block.png","default_steel_block.png","default_mese_block.png^[colorize:#1e6600cc"},
+		groups = {choppy=2,oddly_breakable_by_hand=1},
+		is_ground_content = false,
+		sounds = (default and default.node_sound_wood_defaults()) or nil,
+		after_place_node = function(pos, placer, itemstack)
+			local meta=minetest.get_meta(pos)
+			meta:set_string("owner",placer:get_player_name())
+			meta:set_string("infotext","Teleport to dimension earth")
+		end,
+		on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+			local owner=minetest.get_meta(pos):get_string("owner")
+			local pos2={x=pos.x,y=0,z=pos.z}
+			if minetest.is_protected(pos2, owner)==false then
+				multidimensions.move(player,pos2)
+			end
+		end,
+		mesecons = {effector = {
+			action_on = function (pos, node)
+			local owner=minetest.get_meta(pos):get_string("owner")
+			local pos2={x=pos.x,y=0,z=pos.z}
+			for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
+				multidimensions.move(ob,pos2)
+			end
+			return false
+		end}},
+	})
+
+	minetest.register_node("multidimensions:teleporterre", {
+		description = "Teleport back",
+		tiles = {"default_steel_block.png"},
+		groups = {cracky=3},
+		is_ground_content = false,
+		sounds = (default and default.node_sound_wood_defaults()) or nil,
+		drop = "default:cobble",
+		on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+			local p = minetest.get_meta(pos):get_string("pos")
+			if p == "" then
+				minetest.remove_node(pos)
+				return
+			end
+			multidimensions.move(player,minetest.string_to_pos(p),nil,true)
+		end,
+		mesecons = {effector = {
+			action_on = function (pos, node)
+			local owner=minetest.get_meta(pos):get_string("owner")
+			local pos2={x=pos.x,y=0,z=pos.z}
+			for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
+				multidimensions.move(ob,pos2)
+			end
+			return false
+		end}},
+	})
+end
