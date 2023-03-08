@@ -4,7 +4,6 @@ if minetest.get_modpath("default") then
 	bedrock_tiles = {"default_stone.png","default_cloud.png","default_stone.png","default_stone.png","default_stone.png","default_stone.png",}
 end
 
-
 multidimensions.register_dimension=function(name,def,self)
 
 	local y = multidimensions.first_dimensions_appear_at
@@ -30,7 +29,7 @@ multidimensions.register_dimension=function(name,def,self)
 	def.terrain_density = def.terrain_density or	0.4
 	def.flatland = def.flatland
 	def.gravity = def.gravity or			1
-	
+
 	def.cave_threshold = def.cave_threshold or 0.1 --CBN 22/10/2022 Added cave threshold to dimension definition.
 	--def.sky = def.sky
 
@@ -43,7 +42,7 @@ multidimensions.register_dimension=function(name,def,self)
 	def.map.persist = def.map.persist or 0.7
 	def.map.lacunarity = def.map.lacunarity or 1
 	def.map.flags = def.map.flags or "absvalue"
-	
+
 	def.cavemap = def.cavemap or {} --CBN 22/10/2022 Added cave noise parameters to dimension definition
 	def.cavemap.offset = def.cavemap.offset or 0
 	def.cavemap.scale = def.cavemap.scale or 1
@@ -217,7 +216,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		for z=minp.z,maxp.z do
 		for y=minp.y,maxp.y do
 			local id = area:index(minp.x,y,z)
-		for x=minp.x,maxp.x do	
+		for x=minp.x,maxp.x do
 			local den = math.abs(map[cindx]) - math.abs(height-y)/(depth*2) or 0
 			if y <= miny+bedrock_depth then
 				data[id] = bedrock
@@ -245,11 +244,11 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			else
 				data[id] = air
 			end
-			
+
 			if y < ground_limit and y > miny + bedrock_depth and cavemap[cindx] <= cave_threshold then --CBN 22/10/2022 Cave carving
 				data[id] = air
 			end
-			
+
 			if d.on_generate then
 				data = d.on_generate(d.self,data,id,area,x,y,z) or data
 			end
@@ -261,7 +260,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		end
 
 		local node_y = minp.y
-		
+
 		for i1,v1 in pairs(data) do
 			if i1%area.ystride == 0 then
 				node_y = node_y + 1
