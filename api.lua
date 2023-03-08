@@ -1,3 +1,10 @@
+local bedrock_tiles = {"^[colorize:grey"}
+
+if minetest.get_modpath("default") then
+	bedrock_tiles = {"default_stone.png","default_cloud.png","default_stone.png","default_stone.png","default_stone.png","default_stone.png",}
+end
+
+
 multidimensions.register_dimension=function(name,def,self)
 
 	local y = multidimensions.first_dimensions_appear_at
@@ -311,7 +318,7 @@ end)
 
 minetest.register_node("multidimensions:bedrock", {
 	description = "Bedrock",
-	tiles = {"default_stone.png","default_cloud.png","default_stone.png","default_stone.png","default_stone.png","default_stone.png",},
+	tiles = bedrock_tiles,
 	groups = {unbreakable=1,not_in_creative_inventory = 1},
 	paramtype = "light",
 	sunlight_propagates = true,
