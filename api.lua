@@ -113,7 +113,7 @@ multidimensions.register_dimension=function(name,def,self)
 		node.description = node.description or		"Teleport to dimension " .. name
 		node.tiles = node.tiles or			{"default_steel_block.png"}
 		node.groups = node.groups or		{cracky=2,not_in_creative_inventory=multidimensions.craftable_teleporters and 0 or 1}
-		node.sounds = node.sounds or		default.node_sound_wood_defaults()
+		node.sounds = node.sounds or ( default and default.node_sound_wood_defaults() ) or nil
 		node.after_place_node = function(pos, placer, itemstack)
 			local meta=minetest.get_meta(pos)
 			meta:set_string("owner",placer:get_player_name())
@@ -317,7 +317,7 @@ minetest.register_node("multidimensions:bedrock", {
 	sunlight_propagates = true,
 	drop = "",
 	diggable = false,
-	sounds = default.node_sound_stone_defaults(),
+	sounds = (default and default.node_sound_stone_defaults() ) or nil,
 })
 
 minetest.register_node("multidimensions:blocking", {
@@ -365,7 +365,7 @@ minetest.register_node("multidimensions:teleporter0", {
 	tiles = {"default_steel_block.png","default_steel_block.png","default_mese_block.png^[colorize:#1e6600cc"},
 	groups = {choppy=2,oddly_breakable_by_hand=1},
 	is_ground_content = false,
-	sounds = default.node_sound_wood_defaults(),
+	sounds = (default and default.node_sound_wood_defaults()) or nil,
 	after_place_node = function(pos, placer, itemstack)
 		local meta=minetest.get_meta(pos)
 		meta:set_string("owner",placer:get_player_name())
@@ -394,7 +394,7 @@ minetest.register_node("multidimensions:teleporterre", {
 	tiles = {"default_steel_block.png"},
 	groups = {cracky=3},
 	is_ground_content = false,
-	sounds = default.node_sound_wood_defaults(),
+	sounds = (default and default.node_sound_wood_defaults()) or nil,
 	drop = "default:cobble",
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 		local p = minetest.get_meta(pos):get_string("pos")
