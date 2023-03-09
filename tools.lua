@@ -144,7 +144,7 @@ multidimensions.apply_dimension=function(player)
 		end
 	end
 	player:set_physics_override({gravity=1})
-	player:set_sky(nil,"regular",nil)
+	player: set_sky({type="regular"})
 	multidimensions.player_pos[name] = {
 		y1 = multidimensions.earth.under,
 		y2 = multidimensions.earth.above,
