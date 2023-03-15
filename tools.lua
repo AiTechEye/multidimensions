@@ -161,7 +161,9 @@ multidimensions.move=function(object,pos,set_re)
 		return
 	end
 
-	minetest.set_node({x=pos.x,y=pos.y-2,z=pos.z},{name="default:cobble"})
+	if minetest.get_modpath("default") then
+		minetest.set_node({x=pos.x,y=pos.y-2,z=pos.z},{name="default:cobble"})
+	end
 	minetest.after(1, function(pos,object,move,set_re)
 		for i=1,100,1 do
 			local nname=minetest.get_node(pos).name
@@ -179,12 +181,14 @@ multidimensions.move=function(object,pos,set_re)
 			end
 		end
 		pos.y = pos.y - 2
-		local reg = minetest.registered_nodes[minetest.get_node(pos).name]
-		if reg == nil or reg.walkable == false or reg.name == "default:cobble" then
-			for x = -2,2,1 do
-			for z = -2,2,1 do
-				minetest.set_node({x=pos.x+x,y=pos.y,z=pos.z+z},{name="default:cobble"})
-			end
+		if minetest.get_modpath("default") then
+			local reg = minetest.registered_nodes[minetest.get_node(pos).name]
+			if reg == nil or reg.walkable == false or reg.name == "default:cobble" then
+				for x = -2,2,1 do
+				for z = -2,2,1 do
+					minetest.set_node({x=pos.x+x,y=pos.y,z=pos.z+z},{name="default:cobble"})
+				end
+				end
 			end
 		end
 	end, pos,object,move,set_re)
@@ -205,12 +209,14 @@ multidimensions.move=function(object,pos,set_re)
 			end
 		end
 		pos.y = pos.y - 2
-		local reg = minetest.registered_nodes[minetest.get_node(pos).name]
-		if reg == nil or reg.walkable == false or reg.name == "default:cobble" then
-			for x = -2,2,1 do
-			for z = -2,2,1 do
-				minetest.set_node({x=pos.x+x,y=pos.y,z=pos.z+z},{name="default:cobble"})
-			end
+		if minetest.get_modpath("default") then
+			local reg = minetest.registered_nodes[minetest.get_node(pos).name]
+			if reg == nil or reg.walkable == false or reg.name == "default:cobble" then
+				for x = -2,2,1 do
+				for z = -2,2,1 do
+					minetest.set_node({x=pos.x+x,y=pos.y,z=pos.z+z},{name="default:cobble"})
+				end
+				end
 			end
 		end
 	end, pos,object,move,set_re)
@@ -228,59 +234,62 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
+local tp_tiles = "^[colorize:green"
 if minetest.get_modpath("default") then
-	minetest.register_node("multidimensions:teleporter0", {
-		description = "Teleport to dimension earth",
-		tiles = {"default_steel_block.png","default_steel_block.png","default_mese_block.png^[colorize:#1e6600cc"},
-		groups = {choppy=2,oddly_breakable_by_hand=1},
-		is_ground_content = false,
-		sounds = (default and default.node_sound_wood_defaults()) or nil,
-		after_place_node = function(pos, placer, itemstack)
-			local meta=minetest.get_meta(pos)
-			meta:set_string("owner",placer:get_player_name())
-			meta:set_string("infotext","Teleport to dimension earth")
-		end,
-		on_rightclick = function(pos, node, player, itemstack, pointed_thing)
-			local owner=minetest.get_meta(pos):get_string("owner")
-			local pos2={x=pos.x,y=0,z=pos.z}
-			if minetest.is_protected(pos2, owner)==false then
-				multidimensions.move(player,pos2)
-			end
-		end,
-		mesecons = {effector = {
-			action_on = function (pos, node)
-			local owner=minetest.get_meta(pos):get_string("owner")
-			local pos2={x=pos.x,y=0,z=pos.z}
-			for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
-				multidimensions.move(ob,pos2)
-			end
-			return false
-		end}},
-	})
-
-	minetest.register_node("multidimensions:teleporterre", {
-		description = "Teleport back",
-		tiles = {"default_steel_block.png"},
-		groups = {cracky=3},
-		is_ground_content = false,
-		sounds = (default and default.node_sound_wood_defaults()) or nil,
-		drop = "default:cobble",
-		on_rightclick = function(pos, node, player, itemstack, pointed_thing)
-			local p = minetest.get_meta(pos):get_string("pos")
-			if p == "" then
-				minetest.remove_node(pos)
-				return
-			end
-			multidimensions.move(player,minetest.string_to_pos(p),nil,true)
-		end,
-		mesecons = {effector = {
-			action_on = function (pos, node)
-			local owner=minetest.get_meta(pos):get_string("owner")
-			local pos2={x=pos.x,y=0,z=pos.z}
-			for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
-				multidimensions.move(ob,pos2)
-			end
-			return false
-		end}},
-	})
+	tp_tiles = "default_steel_block.png"
 end
+
+minetest.register_node("multidimensions:teleporter0", {
+	description = "Teleport to dimension earth",
+	tiles = { tp_tiles, tp_tiles, tp_tiles.."^[colorize:#1e6600cc" },
+	groups = {choppy=2,oddly_breakable_by_hand=1},
+	is_ground_content = false,
+	sounds = (default and default.node_sound_wood_defaults()) or nil,
+	after_place_node = function(pos, placer, itemstack)
+		local meta=minetest.get_meta(pos)
+		meta:set_string("owner",placer:get_player_name())
+		meta:set_string("infotext","Teleport to dimension earth")
+	end,
+	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+		local owner=minetest.get_meta(pos):get_string("owner")
+		local pos2={x=pos.x,y=0,z=pos.z}
+		if minetest.is_protected(pos2, owner)==false then
+			multidimensions.move(player,pos2)
+		end
+	end,
+	mesecons = {effector = {
+		action_on = function (pos, node)
+		local owner=minetest.get_meta(pos):get_string("owner")
+		local pos2={x=pos.x,y=0,z=pos.z}
+		for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
+			multidimensions.move(ob,pos2)
+		end
+		return false
+	end}},
+})
+
+minetest.register_node("multidimensions:teleporterre", {
+	description = "Teleport back",
+	tiles = tp_tiles,
+	groups = {cracky=3},
+	is_ground_content = false,
+	sounds = (default and default.node_sound_wood_defaults()) or nil,
+	drop = minetest.get_modpath("default") and "default:cobble" or "",
+	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+		local p = minetest.get_meta(pos):get_string("pos")
+		if p == "" then
+			minetest.remove_node(pos)
+			return
+		end
+		multidimensions.move(player,minetest.string_to_pos(p),nil,true)
+	end,
+	mesecons = {effector = {
+		action_on = function (pos, node)
+		local owner=minetest.get_meta(pos):get_string("owner")
+		local pos2={x=pos.x,y=0,z=pos.z}
+		for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
+			multidimensions.move(ob,pos2)
+		end
+		return false
+	end}},
+})

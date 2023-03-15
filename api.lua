@@ -117,7 +117,7 @@ multidimensions.register_dimension=function(name,def,self)
 
 	if def.teleporter then
 		node.description = node.description or		"Teleport to dimension " .. name
-		node.tiles = node.tiles or			{"default_steel_block.png"}
+		node.tiles = node.tiles or ( minetest.get_modpath("default") and {"default_steel_block.png"}) or "^[colorize:#222222"
 		node.groups = node.groups or		{cracky=2,not_in_creative_inventory=multidimensions.craftable_teleporters and 0 or 1}
 		node.sounds = node.sounds or ( default and default.node_sound_wood_defaults() ) or nil
 		node.after_place_node = function(pos, placer, itemstack)
@@ -159,7 +159,7 @@ multidimensions.register_dimension=function(name,def,self)
 				end
 			}
 		}
-		minetest.register_node("multidimensions:teleporter_" .. name, node)
+		minetest.register_node(":multidimensions:teleporter_" .. name, node)
 
 		if multidimensions.craftable_teleporters and craft then
 			minetest.register_craft({
