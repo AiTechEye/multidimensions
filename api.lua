@@ -1,3 +1,9 @@
+local bedrock_tiles = {"^[colorize:grey"}
+
+if minetest.get_modpath("default") then
+	bedrock_tiles = {"default_stone.png","default_cloud.png","default_stone.png","default_stone.png","default_stone.png","default_stone.png",}
+end
+
 multidimensions.register_dimension=function(name,def,self)
 
 	local y = multidimensions.first_dimensions_appear_at
@@ -23,7 +29,7 @@ multidimensions.register_dimension=function(name,def,self)
 	def.terrain_density = def.terrain_density or	0.4
 	def.flatland = def.flatland
 	def.gravity = def.gravity or			1
-	
+
 	def.cave_threshold = def.cave_threshold or 0.1 --CBN 22/10/2022 Added cave threshold to dimension definition.
 	--def.sky = def.sky
 
@@ -36,7 +42,7 @@ multidimensions.register_dimension=function(name,def,self)
 	def.map.persist = def.map.persist or 0.7
 	def.map.lacunarity = def.map.lacunarity or 1
 	def.map.flags = def.map.flags or "absvalue"
-	
+
 	def.cavemap = def.cavemap or {} --CBN 22/10/2022 Added cave noise parameters to dimension definition
 	def.cavemap.offset = def.cavemap.offset or 0
 	def.cavemap.scale = def.cavemap.scale or 1
@@ -111,9 +117,9 @@ multidimensions.register_dimension=function(name,def,self)
 
 	if def.teleporter then
 		node.description = node.description or		"Teleport to dimension " .. name
-		node.tiles = node.tiles or			{"default_steel_block.png"}
+		node.tiles = node.tiles or ( minetest.get_modpath("default") and {"default_steel_block.png"}) or "^[colorize:#222222"
 		node.groups = node.groups or		{cracky=2,not_in_creative_inventory=multidimensions.craftable_teleporters and 0 or 1}
-		node.sounds = node.sounds or		default.node_sound_wood_defaults()
+		node.sounds = node.sounds or ( default and default.node_sound_wood_defaults() ) or nil
 		node.after_place_node = function(pos, placer, itemstack)
 			local meta=minetest.get_meta(pos)
 			meta:set_string("owner",placer:get_player_name())
@@ -153,7 +159,7 @@ multidimensions.register_dimension=function(name,def,self)
 				end
 			}
 		}
-		minetest.register_node("multidimensions:teleporter_" .. name, node)
+		minetest.register_node(":multidimensions:teleporter_" .. name, node)
 
 		if multidimensions.craftable_teleporters and craft then
 			minetest.register_craft({
@@ -210,7 +216,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		for z=minp.z,maxp.z do
 		for y=minp.y,maxp.y do
 			local id = area:index(minp.x,y,z)
-		for x=minp.x,maxp.x do	
+		for x=minp.x,maxp.x do
 			local den = math.abs(map[cindx]) - math.abs(height-y)/(depth*2) or 0
 			if y <= miny+bedrock_depth then
 				data[id] = bedrock
@@ -238,11 +244,11 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			else
 				data[id] = air
 			end
-			
+
 			if y < ground_limit and y > miny + bedrock_depth and cavemap[cindx] <= cave_threshold then --CBN 22/10/2022 Cave carving
 				data[id] = air
 			end
-			
+
 			if d.on_generate then
 				data = d.on_generate(d.self,data,id,area,x,y,z) or data
 			end
@@ -254,7 +260,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 		end
 
 		local node_y = minp.y
-		
+
 		for i1,v1 in pairs(data) do
 			if i1%area.ystride == 0 then
 				node_y = node_y + 1
@@ -311,13 +317,13 @@ end)
 
 minetest.register_node("multidimensions:bedrock", {
 	description = "Bedrock",
-	tiles = {"default_stone.png","default_cloud.png","default_stone.png","default_stone.png","default_stone.png","default_stone.png",},
+	tiles = bedrock_tiles,
 	groups = {unbreakable=1,not_in_creative_inventory = 1},
 	paramtype = "light",
 	sunlight_propagates = true,
 	drop = "",
 	diggable = false,
-	sounds = default.node_sound_stone_defaults(),
+	sounds = (default and default.node_sound_stone_defaults() ) or nil,
 })
 
 minetest.register_node("multidimensions:blocking", {
@@ -358,63 +364,6 @@ minetest.register_on_chat_message(function(name, message)
 	return true
 end)
 end
-
-
-minetest.register_node("multidimensions:teleporter0", {
-	description = "Teleport to dimension earth",
-	tiles = {"default_steel_block.png","default_steel_block.png","default_mese_block.png^[colorize:#1e6600cc"},
-	groups = {choppy=2,oddly_breakable_by_hand=1},
-	is_ground_content = false,
-	sounds = default.node_sound_wood_defaults(),
-	after_place_node = function(pos, placer, itemstack)
-		local meta=minetest.get_meta(pos)
-		meta:set_string("owner",placer:get_player_name())
-		meta:set_string("infotext","Teleport to dimension earth")
-	end,
-	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
-		local owner=minetest.get_meta(pos):get_string("owner")
-		local pos2={x=pos.x,y=0,z=pos.z}
-		if minetest.is_protected(pos2, owner)==false then
-			multidimensions.move(player,pos2)
-		end
-	end,
-	mesecons = {effector = {
-		action_on = function (pos, node)
-		local owner=minetest.get_meta(pos):get_string("owner")
-		local pos2={x=pos.x,y=0,z=pos.z}
-		for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
-			multidimensions.move(ob,pos2)
-		end
-		return false
-	end}},
-})
-
-minetest.register_node("multidimensions:teleporterre", {
-	description = "Teleport back",
-	tiles = {"default_steel_block.png"},
-	groups = {cracky=3},
-	is_ground_content = false,
-	sounds = default.node_sound_wood_defaults(),
-	drop = "default:cobble",
-	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
-		local p = minetest.get_meta(pos):get_string("pos")
-		if p == "" then
-			minetest.remove_node(pos)
-			return
-		end
-		multidimensions.move(player,minetest.string_to_pos(p),nil,true)
-	end,
-	mesecons = {effector = {
-		action_on = function (pos, node)
-		local owner=minetest.get_meta(pos):get_string("owner")
-		local pos2={x=pos.x,y=0,z=pos.z}
-		for i, ob in pairs(minetest.get_objects_inside_radius(pos, 5)) do
-			multidimensions.move(ob,pos2)
-		end
-		return false
-	end}},
-})
-
 
 if multidimensions.limeted_nametag==true and minetest.settings:get_bool("unlimited_player_transfer_distance")~=false then
 	minetest.settings:set_bool("unlimited_player_transfer_distance",false)

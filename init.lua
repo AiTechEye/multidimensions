@@ -29,5 +29,9 @@ multidimensions={
 }
 
 dofile(minetest.get_modpath("multidimensions") .. "/api.lua")
-dofile(minetest.get_modpath("multidimensions") .. "/dimensions.lua")
+
+if minetest.get_modpath("default") then
+	dofile(minetest.get_modpath("multidimensions") .. "/dimensions.lua")
+end
+
 dofile(minetest.get_modpath("multidimensions") .. "/tools.lua")
